@@ -1,0 +1,18 @@
+CREATE TABLE `keagamaan` (
+`id` INT(11) NOT NULL AUTO_INCREMENT,
+`student_id` int(11) NOT NULL,
+`user_id` varchar(100) NOT NULL,
+`class_id` int(11) NOT NULL,
+`section_id` int(11) NOT NULL,
+`date` date NOT NULL,
+`sholat_shubuh` INT(1) NULL DEFAULT 0, 
+`sholat_dzuhur` INT(1) NULL DEFAULT 0,
+`shalat_ashar` INT(1) NULL DEFAULT 0,
+`shalat_magrib` INT(1) NULL DEFAULT 0,
+`shalat_isya` INT(1) NULL DEFAULT 0,
+`membaca_asmaul_husna` INT(1) NULL DEFAULT 0,
+`mengenal_kosakata_arab` INT(1) NULL DEFAULT 0,
+`hafal_doa` INT(1) NULL DEFAULT 0,
+`mengikuti_kajian` INT(1) NULL DEFAULT 0,
+`membaca_quran` INT(1) NULL DEFAULT 0,
+PRIMARY KEY (`id`)) ENGINE = InnoDB;
