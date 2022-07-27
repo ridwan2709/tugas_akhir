@@ -25,6 +25,12 @@
                             $section = $this->db->get_where('enroll', array('student_id' => $student_id))->row()->section_id;
                             ?>
                             <div class="tab-pane active" id="lpa_data">
+                                <div class="row">
+                                    <div class="col-sm-3" style="border: 1px solid #eee; max-width:20% !important">
+                                        <h5 class="form-header">Statistik Nilai</h5>
+                                        <canvas id="myChart" width="400" height="400"></canvas>
+                                    </div>
+                                </div>
                                 <?php if ($section == 1 OR $section == 2 OR $section == 3) { ?>
                                     <div class="element-box-tp">
                                         <div class="table-responsive">
@@ -219,6 +225,12 @@
                             ];
                             ?>
                             <div class="tab-pane" id="lk_data">
+                                <div class="row">
+                                    <div class="col-sm-3" style="border: 1px solid #eee;">
+                                        <h5 class="form-header">Statistik Nilai</h5>
+                                        <canvas id="myChart2" width="400" height="400"></canvas>
+                                    </div>
+                                </div>
                                 <?php if ($section == 1 OR $section == 2 OR $section == 3) { ?>
                                     <div class="element-box-tp">
                                         <div class="table-responsive">
@@ -310,3 +322,155 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+<script>
+    var ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+            datasets: [{
+                label: 'Nilai',
+                data: [
+                    <?php
+                    if ($section == 15 or $section == 5 or $section == 7) {
+                        foreach ($build2 as $key => $row) {
+                            $lpa = $this->db->get_where('build2', array('date' => $row['date'], 'student_id' => $row['student_id']))->result_array();
+                            foreach ($lpa as $key => $value) {
+                                $jumlah_nilai1 = 0;
+                                foreach ($value as $kode => $nilai) {
+                                    if (strpos($kode, 'lpa_') === 0) {
+                                        $jumlah_nilai1 += $nilai;
+                                        $jumlah_jenis++;
+                                    }
+                                }
+                            }
+                            echo $jumlah_nilai1 . ',';
+                        }
+                    } else {
+                        foreach ($build as $key => $row) {
+                            $lpa = $this->db->get_where('build', array('date' => $row['date'], 'student_id' => $row['student_id']))->result_array();
+                            foreach ($lpa as $key => $value) {
+                                $jumlah_nilai1 = 0;
+                                foreach ($value as $kode => $nilai) {
+                                    if (strpos($kode, 'adb_') === 0) {
+                                        $jumlah_nilai1 += $nilai;
+                                        $jumlah_jenis++;
+                                    }
+                                }
+                            }
+                            echo $jumlah_nilai1 . ',';
+                        }
+                    }
+                    ?>
+                ],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+</script>
+<script>
+    var ctx = document.getElementById('myChart2');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+            datasets: [{
+                label: 'Nilai',
+                data: [
+                    <?php
+                    if ($section == 15 or $section == 5 or $section == 7) {
+                        foreach ($lk_data2 as $key => $value) {
+                            $lk2 = $this->db->get_where('keagamaan2', array('date' => $value['date'], 'student_id' => $value['student_id']))->result_array();
+                            foreach ($lk2 as $key => $row) {
+                                $nilai2 =
+                                    $row['sholat_wajib'] +
+                                    $row['sholat_rawatib'] +
+                                    $row['sholat_dhuha'] +
+                                    $row['sholat_tahajud'] +
+                                    $row['setor_dalil'] +
+                                    $row['menutup_aurat'] +
+                                    $row['ilmu_fiqih'] +
+                                    $row['membaca_alquran'] +
+                                    $row['bahasa_arab'] +
+                                    $row['shaum'] +
+                                    $row['asmaulhusna'];
+                            }
+                            echo $nilai2 . ',';
+                        }
+                    } else {
+                        foreach ($lk_data as $key => $value) {
+                            $lk = $this->db->get_where('keagamaan', array('date' => $value['date'], 'student_id' => $value['student_id']))->result_array();
+                            foreach ($lk as $key => $row) {
+                                $nilai1 =
+                                    $row['sholat_shubuh'] +
+                                    $row['sholat_dzuhur'] +
+                                    $row['shalat_ashar'] +
+                                    $row['shalat_magrib'] +
+                                    $row['shalat_isya'] +
+                                    $row['membaca_asmaul_husna'] +
+                                    $row['mengenal_kosakata_arab'] +
+                                    $row['hafal_doa'] +
+                                    $row['mengikuti_kajian'] +
+                                    $row['membaca_quran'];
+                            }
+                            echo $nilai1 . ',';
+                        }
+                    }
+                    ?>
+                ],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+</script>

@@ -5047,6 +5047,7 @@ class Admin extends CI_Controller
         $page_data['class_id'] = $ex[0];
         $page_data['section_id'] = $ex[1];
         $page_data['student_id'] = $ex[2];
+        $page_data['user_id'] = $ex[3];
         $page_data['page_name']  = 'edit_karakter';
         $page_data['page_title'] = 'Ubah Nilai Karakter';
         $this->load->view('backend/index', $page_data);

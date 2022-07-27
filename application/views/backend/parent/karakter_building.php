@@ -17,7 +17,14 @@ list($start_date, $end_date) = x_week_range($date);
             <a class="navs-links active" href="<?php echo base_url(); ?>parents/karakter_building/"><i class="os-icon picons-thin-icon-thin-0724_policeman_security"></i><span><?php echo get_phrase('character building'); ?></span></a>
           </li>
           <li class="navs-item">
-            <a class="navs-links" href="<?php echo base_url(); ?>parents/student_report/"><i class="os-icon picons-thin-icon-thin-0389_gavel_hammer_law_judge_court"></i><span><?php echo get_phrase('reports'); ?></span></a>
+            <a class="navs-links" href="<?php echo base_url(); ?>
+            s/forum_konseling/"><i class="os-icon picons-thin-icon-thin-0281_chat_message_discussion_bubble_reply_conversation"></i><span>Forum Diskusi</span></a>
+          </li>
+          <li class="navs-item">
+            <a class="navs-links" href="<?php echo base_url(); ?>parents/request_student/"><i class="os-icon picons-thin-icon-thin-0389_gavel_hammer_law_judge_court"></i><span><?php echo get_phrase('reports'); ?></span></a>
+          </li>
+          <li class="navs-item">
+            <a class="navs-links" href="<?php echo base_url(); ?>parents/meet_konseling/"><i class="os-icon picons-thin-icon-thin-0591_presentation_video_play_beamer"></i><span><?php echo get_phrase('live'); ?></span></a>
           </li>
         </ul>
       </div>
@@ -59,6 +66,16 @@ list($start_date, $end_date) = x_week_range($date);
         <div class="tab-pane active" id="data">
           <div class="element-wrapper">
             <div class="element-header">
+              <div class="row">
+                  <div class="col-sm-3" style="border: 1px solid #eee; max-width:20% !important">
+										<h5 class="form-header">Lembar Keagamaan</h5>
+										<canvas id="myChart" width="400" height="400" style="display: block; width: 401px; height: 401px;" class="chartjs-render-monitor"></canvas>
+									</div>
+                  <div class="col-sm-3" style="border: 1px solid #eee; max-width:20% !important">
+										<h5 class="form-header">Lembar Perilaku Adab</h5>
+										<canvas id="myChart2" width="400" height="400" style="display: block; width: 401px; height: 401px;" class="chartjs-render-monitor"></canvas>
+									</div>
+              </div>
               <div style="position: absolute; right: 0; top: -20px;">
                 <a href="#" data-target="#addroutine" data-toggle="modal" data-focus="false" class="btn btn-control btn-grey-lighter btn-purple mr-2"><i class="picons-thin-icon-thin-0001_compose_write_pencil_new"></i>
                 </a>
@@ -76,26 +93,21 @@ list($start_date, $end_date) = x_week_range($date);
                       <th style="text-align: center; vertical-align:middle"><?php echo get_phrase('student'); ?></th>
                       <th style="text-align: center"><?php echo get_phrase('Perilaku dan Adab'); ?></th>
                       <th style="text-align: center"><?php echo get_phrase('Keagamaan'); ?></th>
+                      <th style="text-align: center"><?php echo get_phrase('Edit'); ?></th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php
-                    $result = $this->db->query("SELECT count(DISTINCT date) as date_count, `build_id`, `build`.`student_id`, `build`.`user_id`, `build`.`class_id`, `build`.`section_id`, AVG(NULLIF(adb_1a, 0)) AS adb_1a, AVG(NULLIF(adb_1b, 0)) AS adb_1b, AVG(NULLIF(adb_1c, 0)) AS adb_1c, AVG(NULLIF(adb_1d, 0)) AS adb_1d, AVG(NULLIF(adb_2a, 0)) AS adb_2a, AVG(NULLIF(adb_2b, 0)) AS adb_2b, AVG(NULLIF(adb_2c, 0)) AS adb_2c, AVG(NULLIF(adb_2d, 0)) AS adb_2d, AVG(NULLIF(adb_2e, 0)) AS adb_2e, AVG(NULLIF(adb_3a, 0)) AS adb_3a, AVG(NULLIF(adb_3b, 0)) AS adb_3b, AVG(NULLIF(adb_4a, 0)) AS adb_4a, AVG(NULLIF(adb_4b, 0)) AS adb_4b, AVG(NULLIF(adb_5a, 0)) AS adb_5a, AVG(NULLIF(adb_5b, 0)) AS adb_5b, AVG(NULLIF(adb_6a, 0)) AS adb_6a, AVG(NULLIF(adb_6b, 0)) AS adb_6b, AVG(NULLIF(adb_6c, 0)) AS adb_6c, AVG(NULLIF(adb_6d, 0)) AS adb_6d, AVG(NULLIF(adb_7a, 0)) AS adb_7a, AVG(NULLIF(adb_7b, 0)) AS adb_7b, AVG(NULLIF(adb_7c, 0)) AS adb_7c, AVG(NULLIF(adb_7d, 0)) AS adb_7d, AVG(NULLIF(adb_7e, 0)) AS adb_7e, AVG(NULLIF(adb_8a, 0)) AS adb_8a, AVG(NULLIF(adb_8b, 0)) AS adb_8b, AVG(NULLIF(adb_9a, 0)) AS adb_9a, AVG(NULLIF(adb_9b, 0)) AS adb_9b, lk_sholat_shubuh, lk_sholat_dzuhur, lk_shalat_ashar, lk_shalat_magrib, lk_shalat_isya, lk_membaca_asmaul_husna, lk_mengenal_kosakata_arab, lk_hafal_doa, lk_mengikuti_kajian, lk_membaca_quran FROM `build`
-                    LEFT JOIN( SELECT student_id, SUM(sholat_shubuh) AS lk_sholat_shubuh, SUM(sholat_dzuhur) AS lk_sholat_dzuhur, SUM(shalat_ashar) AS lk_shalat_ashar, SUM(shalat_magrib) AS lk_shalat_magrib, SUM(shalat_isya) AS lk_shalat_isya, SUM(membaca_asmaul_husna) AS lk_membaca_asmaul_husna, SUM(mengenal_kosakata_arab) AS lk_mengenal_kosakata_arab, SUM(hafal_doa) AS lk_hafal_doa, SUM(mengikuti_kajian) AS lk_mengikuti_kajian, SUM(membaca_quran) AS lk_membaca_quran FROM 
-                    (SELECT student_id, AVG(NULLIF(sholat_shubuh, 0)) AS sholat_shubuh, AVG(NULLIF(sholat_dzuhur, 0)) AS sholat_dzuhur, AVG(NULLIF(shalat_ashar, 0)) AS shalat_ashar, AVG(NULLIF(shalat_magrib, 0)) AS shalat_magrib, AVG(NULLIF(shalat_isya, 0)) AS shalat_isya, AVG(NULLIF(membaca_asmaul_husna, 0)) AS membaca_asmaul_husna, AVG(NULLIF(mengenal_kosakata_arab, 0)) AS mengenal_kosakata_arab, AVG(NULLIF(hafal_doa, 0)) AS hafal_doa, AVG(NULLIF(mengikuti_kajian, 0)) AS mengikuti_kajian, AVG(NULLIF(membaca_quran, 0)) AS membaca_quran FROM `keagamaan` WHERE `date` >= '$start_date' AND `date` <= '$end_date' GROUP BY `student_id`, `date`) as k group by student_id) AS lk
-                    ON lk.student_id = build.student_id WHERE `build`.`date` >= '$start_date' AND `build`.`date` <= '$end_date' GROUP BY `build`.`student_id`")->result_array();
-
-                    $result2 = $this->db->query("SELECT count(DISTINCT date) as date_count, `build_id`, `build2`.`student_id`, `build2`.`user_id`, `build2`.`class_id`, `build2`.`section_id`, AVG(NULLIF(lpa_2_1, 0)) AS lpa_2_1, AVG(NULLIF(lpa_2_24, 0)) AS lpa_2_24, AVG(NULLIF(lpa_2_2, 0)) AS lpa_2_2, AVG(NULLIF(lpa_2_4, 0)) AS lpa_2_4, AVG(NULLIF(lpa_2_5, 0)) AS lpa_2_5, AVG(NULLIF(lpa_2_6, 0)) AS lpa_2_6, AVG(NULLIF(lpa_2_7, 0)) AS lpa_2_7, AVG(NULLIF(lpa_2_8, 0)) AS lpa_2_8, AVG(NULLIF(lpa_2_9, 0)) AS lpa_2_9, AVG(NULLIF(lpa_2_10, 0)) AS lpa_2_10, AVG(NULLIF(lpa_2_11, 0)) AS lpa_2_11, AVG(NULLIF(lpa_2_12, 0)) AS lpa_2_12, AVG(NULLIF(lpa_2_13, 0)) AS lpa_2_13, AVG(NULLIF(lpa_2_14, 0)) AS lpa_2_14, AVG(NULLIF(lpa_2_15, 0)) AS lpa_2_15, AVG(NULLIF(lpa_2_16, 0)) AS lpa_2_16, AVG(NULLIF(lpa_2_17, 0)) AS lpa_2_17, AVG(NULLIF(lpa_2_18, 0)) AS lpa_2_18, AVG(NULLIF(lpa_2_19, 0)) AS lpa_2_19, AVG(NULLIF(lpa_2_20, 0)) AS lpa_2_20, AVG(NULLIF(lpa_2_21, 0)) AS lpa_2_21, AVG(NULLIF(lpa_2_22, 0)) AS lpa_2_22, AVG(NULLIF(lpa_2_23, 0)) AS lpa_2_23, lk_sholat_wajib, lk_sholat_rawatib, lk_sholat_dhuha, lk_sholat_tahajud, lk_setor_dalil, lk_menutup_aurat, lk_ilmu_fiqih, lk_membaca_alquran, lk_bahasa_arab, lk_shaum,lk_asmaulhusna FROM `build2` LEFT JOIN( SELECT student_id, SUM(sholat_wajib) AS lk_sholat_wajib, SUM(sholat_rawatib) AS lk_sholat_rawatib, SUM(sholat_dhuha) AS lk_sholat_dhuha, SUM(sholat_tahajud) AS lk_sholat_tahajud, SUM(setor_dalil) AS lk_setor_dalil, SUM(menutup_aurat) AS lk_menutup_aurat, SUM(ilmu_fiqih) AS lk_ilmu_fiqih, SUM(membaca_alquran) AS lk_membaca_alquran, SUM(bahasa_arab) AS lk_bahasa_arab, SUM(shaum) AS lk_shaum, SUM(asmaulhusna) AS lk_asmaulhusna FROM (SELECT student_id, AVG(NULLIF(sholat_wajib, 0)) AS sholat_wajib, AVG(NULLIF(sholat_rawatib, 0)) AS sholat_rawatib, AVG(NULLIF(sholat_dhuha, 0)) AS sholat_dhuha, AVG(NULLIF(sholat_tahajud, 0)) AS sholat_tahajud, AVG(NULLIF(setor_dalil, 0)) AS setor_dalil, AVG(NULLIF(menutup_aurat, 0)) AS menutup_aurat, AVG(NULLIF(ilmu_fiqih, 0)) AS ilmu_fiqih, AVG(NULLIF(membaca_alquran, 0)) AS membaca_alquran, AVG(NULLIF(bahasa_arab, 0)) AS bahasa_arab, AVG(NULLIF(shaum, 0)) AS shaum, AVG(NULLIF(asmaulhusna,0)) AS asmaulhusna FROM `keagamaan2` WHERE `date` >= '$start_date' AND `date` <= '$end_date' GROUP BY `student_id`, `date`) as k group by student_id) AS lk ON lk.student_id = build2.student_id WHERE `build2`.`date` >= '$start_date' AND `build2`.`date` <= '$end_date' GROUP BY `build2`.`student_id`")->result_array();
 
                     // level 1
                     foreach ($result as $key => $row) {
-                      $jumlah_nilai = 0;
+                      $jumlah_nilai1 = 0;
                       $jumlah_jenis = 0;
                       $jumlah_lk = 0;
                       $jumlah_hari_kosong = ($week ? 7 : date('N')) - $row['date_count'];
                       foreach ($row as $kode => $nilai) {
                         if (strpos($kode, 'adb_') === 0) {
-                          $jumlah_nilai += $nilai;
+                          $jumlah_nilai1 += $nilai;
                           $jumlah_jenis++;
                         } else if (strpos($kode, 'lk_') === 0) {
                           $jumlah_lk += round($nilai);
@@ -104,7 +116,7 @@ list($start_date, $end_date) = x_week_range($date);
                       if ($jumlah_hari_kosong) {
                         $jumlah_jenis = $jumlah_jenis * $jumlah_hari_kosong;
                       }
-                      $rata2_lpa = $jumlah_nilai / $jumlah_jenis;
+                      $rata2_lpa = $jumlah_nilai1 / $jumlah_jenis;
                       $result[$key]['rata2_lpa'] = $rata2_lpa;
                       $result[$key]['rata2_lpa_round'] = round($rata2_lpa);
                       $result[$key]['jumlah_lk'] = round($jumlah_lk);
@@ -115,31 +127,34 @@ list($start_date, $end_date) = x_week_range($date);
 
                     //level2
                     foreach ($result2 as $key => $row) {
-                      $jumlah_nilai = 0;
+                      $jumlah_nilai2 = 0;
                       $jumlah_jenis = 0;
-                      $jumlah_lk = 0;
+                      $jumlah_lk2 = 0;
                       $jumlah_hari_kosong = ($week ? 7 : date('N')) - $row['date_count'];
                       foreach ($row as $kode => $nilai) {
                         if (strpos($kode, 'lpa_') === 0) {
-                          $jumlah_nilai += $nilai;
+                          $jumlah_nilai2 += $nilai;
                           $jumlah_jenis++;
                         } else if (strpos($kode, 'lk_') === 0) {
-                          $jumlah_lk += round($nilai);
+                          $jumlah_lk2 += round($nilai);
                         }
                       }
                       if ($jumlah_hari_kosong) {
                         $jumlah_jenis = $jumlah_jenis * $jumlah_hari_kosong;
                       }
-                      $rata2_lpa = $jumlah_nilai / $jumlah_jenis;
+                      $rata2_lpa = $jumlah_nilai2 / $jumlah_jenis;
                       $result2[$key]['rata2_lpa'] = $rata2_lpa;
                       $result2[$key]['rata2_lpa_round'] = round($rata2_lpa);
-                      $result2[$key]['jumlah_lk'] = round($jumlah_lk);
+                      $result2[$key]['jumlah_lk'] = round($jumlah_lk2);
                     }
                     $lpa_value = array_column($result2, 'rata2_lpa_round');
                     $lk_value = array_column($result2, 'jumlah_lk');
                     array_multisort($lpa_value, SORT_DESC, $lk_value, SORT_DESC, $result2);
+
                     //level 2
                     foreach ($result2 as $row2) {
+                      $param_for_edit = base64_encode($row2['class_id'].'-'.$row2['section_id'].'-'.$row2['student_id']);
+                      $cek_data = $this->db->get_where('build2', array('user_id' => 'parent-'.$this->session->userdata('login_user_id'), 'date' => $date))->row();
                     ?>
                       <tr>
                         <td><span><?php echo $this->db->get_where('enroll', array('student_id' => $row2['student_id']))->row()->roll; ?></span></td>
@@ -148,11 +163,15 @@ list($start_date, $end_date) = x_week_range($date);
                         </td>
                         <td><?= to_abj($row2['rata2_lpa']); ?></td>
                         <td><?= round($row2['jumlah_lk']); ?></td>
+                      <?=  $cek_data != NULL  ? '<td align="center"> <a href="'. base_url() .'parents/edit_karakter/'. $param_for_edit .'" class="btn btn-control btn-grey-lighter btn-success" style="color:#eee"><i class="picons-thin-icon-thin-0002_write_pencil_new_edit"></i></a> </td>' : "" ?>
                       </tr>
                     <?php
                     }
+
                     //level 1
                     foreach ($result as $row) {
+                      $param_for_edit = base64_encode($row['class_id'].'-'.$row['section_id'].'-'.$row['student_id']);
+                      $cek_data = $this->db->get_where('build', array('user_id' => 'parents-'.$this->session->userdata('login_user_id'), 'date' => $date))->row();
                     ?>
                       <tr>
                         <td><span><?php echo $this->db->get_where('enroll', array('student_id' => $row['student_id']))->row()->roll; ?></span></td>
@@ -161,6 +180,7 @@ list($start_date, $end_date) = x_week_range($date);
                         </td>
                         <td><?= to_abj($row['rata2_lpa']); ?></td>
                         <td><?= round($row['jumlah_lk']); ?></td>
+                        <?=  $cek_data != NULL  ? '<td align="center"> <a href="'. base_url() .'parents/edit_karakter/'. $param_for_edit .'" class="btn btn-control btn-grey-lighter btn-success" style="color:#eee"><i class="picons-thin-icon-thin-0002_write_pencil_new_edit"></i></a> </td>' : "" ?>
                       </tr>
                     <?php
                     }
@@ -189,27 +209,6 @@ list($start_date, $end_date) = x_week_range($date);
                   </thead>
                   <tbody>
                     <?php
-                    $date = date('Y-m-d');
-                    if ($week) {
-                      $date = date('Y-m-d', strtotime($week . ' week'));
-                    }
-                    list($start_date, $end_date) = x_week_range($date);
-                    // sql level 2
-                    $this->db->where('date >=', $start_date);
-                    $this->db->where('date <=', $end_date);
-                    $sqlLPA2 = $this->db->get('build2')->result_array();
-                    $this->db->where('date >=', $start_date);
-                    $this->db->where('date <=', $end_date);
-                    $sqlLK2 = $this->db->get('keagamaan2')->result_array();
-
-                    // sql level 1
-                    $this->db->where('date >=', $start_date);
-                    $this->db->where('date <=', $end_date);
-                    $sqlLPA = $this->db->get('build')->result_array();
-                    $this->db->where('date >=', $start_date);
-                    $this->db->where('date <=', $end_date);
-                    $sqlLK = $this->db->get('keagamaan')->result_array();
-
 
                     // level2
                     foreach ($sqlLPA2 as $key => $data) :
@@ -238,22 +237,22 @@ list($start_date, $end_date) = x_week_range($date);
 
                       // lk
                       $lk = $sqlLK2[$key];
-                      $jumlah_lk = 0;
+                      $jumlah_lk2 = 0;
                       $angka_terisi = 0;
                       $indikators = array_slice(array_keys($lk), 6);
                       foreach ($indikators as $indikator) {
                         if ($lk[$indikator] != 0) $angka_terisi++;
 
-                        $jumlah_lk += $lk[$indikator];
+                        $jumlah_lk2 += $lk[$indikator];
                       }
-                    ?>
+                      ?>
                       <tr>
                         <td><?= $data['date'] ?></td>
                         <td><img alt="" src="<?php echo $this->crud_model->get_image_url($tabel, $tes[0]->user_id); ?>" style="height: 25px; border-radius:50%;" class="purple"><span> <?php echo $this->crud_model->get_name($tabel, $tes[0]->user_id); ?></span></td>
                         <td><img alt="" src="<?php echo $this->crud_model->get_image_url('student', $data['student_id']); ?>" style="height: 25px; border-radius:50%;" class="purple"><span> <?php echo $this->crud_model->get_name('student', $data['student_id']); ?></span></td>
                         <td><?= $this->db->get_where('section', array('section_id' => $data['section_id']))->row()->name; ?></td>
                         <td><?= to_abj($hasillpa2); ?></td>
-                        <td><?= $jumlah_lk ?></td>
+                        <td><?= $jumlah_lk2 ?></td>
                       </tr>
                     <?php endforeach; ?>
                     <?php
@@ -284,8 +283,8 @@ list($start_date, $end_date) = x_week_range($date);
 
                       $id = $data['user_id'];
                       $tes = $this->db->query("SELECT SUBSTR('$id', POSITION('-' IN '$id')+1) AS user_id, SUBSTR('$id',1, POSITION('-' IN '$id')-1) AS user_type")->result();
-                      if ($tes[0]->user_type == 'admin') {
-                        $tabel = 'admin';
+                      if ($tes[0]->user_type == 'parents') {
+                        $tabel = 'parents';
                       } else if ($tes[0]->user_type == 'teacher') {
                         $tabel = 'teacher';
                       } else if ($tes[0]->user_type == 'parent') {
@@ -294,24 +293,25 @@ list($start_date, $end_date) = x_week_range($date);
 
                       // lk
                       $lk = $sqlLK[$key];
-                      $jumlah_lk = 0;
+                      $jumlah_lk1 = 0;
                       $angka_terisi = 0;
                       $indikators = array_slice(array_keys($lk), 6);
                       foreach ($indikators as $indikator) {
                         if ($lk[$indikator] != 0) $angka_terisi++;
 
-                        $jumlah_lk += $lk[$indikator];
+                        $jumlah_lk1 += $lk[$indikator];
                       }
                     ?>
                       <tr>
                         <td><?= $data['date'] ?></td>
-                        <td><img alt="" src="<?php echo $this->crud_model->get_image_url($tabel, $tes[0]->user_id); ?>" style="height: 25px; border-radius:50%;" class="purple"><span> <?php echo $this->crud_model->get_name($tabel, $tes[0]->user_id); ?></span></td>
-                        <td><img alt="" src="<?php echo $this->crud_model->get_image_url('student', $data['student_id']); ?>" style="height: 25px; border-radius:50%;" class="purple"><span> <?php echo $this->crud_model->get_name('student', $data['student_id']); ?></span></td>
+                        <td><img alt="" src="<?php echo $this->crud_model->get_image_url($tabel, $tes[0]->user_id); ?>" style="height: 25px; border-radius:50%;" class="purple" ><span> <?php echo $this->crud_model->get_name($tabel, $tes[0]->user_id); ?></span></td>
+                        <td><img alt="" src="<?php echo $this->crud_model->get_image_url('student', $data['student_id']); ?>" style="height: 25px; border-radius:50%;" class="purple" ><span> <?php echo $this->crud_model->get_name('student', $data['student_id']); ?></span></td>
                         <td><?= $this->db->get_where('section', array('section_id' => $data['section_id']))->row()->name; ?></td>
                         <td><?= to_abj($hasillpa) ?></td>
-                        <td><?= $jumlah_lk ?></td>
+                        <td><?= $jumlah_lk1 ?></td>
                       </tr>
                     <?php endforeach; ?>
+                    
                   </tbody>
                 </table>
               </div>
@@ -321,8 +321,7 @@ list($start_date, $end_date) = x_week_range($date);
       </div>
     </div>
   </div>
-</div>
-<div class="display-type"></div>
+  <div class="display-type"></div>
 </div>
 
 <div class="modal fade" id="addroutine" tabindex="-1" role="dialog" aria-labelledby="addroutine" aria-hidden="true">
@@ -337,16 +336,37 @@ list($start_date, $end_date) = x_week_range($date);
         <div class="ui-block-content">
           <?php echo form_open(base_url() . 'parents/create_perilaku/send/', array('enctype' => 'multipart/form-data')); ?>
           <div class="row">
+            <div class="col col-lg-6 col-md-6 col-sm-12 col-12">
+              <div class="form-group label-floating is-select">
+                <label class="control-label"><?php echo get_phrase('class'); ?></label>
+                <div class="select">
+                  <select name="class_id" onchange="get_class_sections(this.value)">
+                    <option value=""><?php echo get_phrase('select'); ?></option>
+                    <?php $cl = $this->db->get('class')->result_array();
+                    foreach ($cl as $row) :
+                    ?>
+                      <option value="<?php echo $row['class_id']; ?>"><?php echo $row['name']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col col-lg-6 col-md-6 col-sm-12 col-12">
+              <div class="form-group label-floating is-select">
+                <label class="control-label"><?php echo get_phrase('section'); ?></label>
+                <div class="select">
+                  <select name="section_id" id="section_selector_holder" onchange="get_class_students(this.value); type_section(this.value)">
+                    <option value=""><?php echo get_phrase('select'); ?></option>
+                  </select>
+                </div>
+              </div>
+            </div>
             <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
               <div class="form-group label-floating is-select">
                 <label class="control-label"><?php echo get_phrase('stduent'); ?></label>
                 <div class="select">
                   <select name="student_id" id="students_holder" onchange="get_lpa_lk_data(this.value)" required>
-                    <option value="0"><?= get_phrase('select') ?></option>
-                    <?php $children_of_parent = $this->db->get_where('student', array('parent_id' => $this->session->userdata('parent_id')))->result_array();
-                    foreach ($children_of_parent as $row) : ?>
-                      <option value="<?php echo $row['student_id']; ?>"><?php echo $this->crud_model->get_name('student', $row['student_id']); ?></option>
-                    <?php endforeach; ?>
+                    <option value=""><?php echo get_phrase('select'); ?></option>
                   </select>
                 </div>
               </div>
@@ -357,7 +377,7 @@ list($start_date, $end_date) = x_week_range($date);
                 <label class="control-label"><?php echo get_phrase('type'); ?></label>
                 <div class="select">
                   <select name="input_type" id="input_type" onchange="change_type(this.value)">
-                    <option value="0" selected>Pilih</option>
+                    <option value="0" selected></option>
                     <option value="1"><?= get_phrase('Perilaku dan Adab') ?></option>
                     <option value="2"><?= get_phrase('keagamaan') ?></option>
                   </select>
@@ -370,14 +390,14 @@ list($start_date, $end_date) = x_week_range($date);
                 <label class="control-label"><?php echo get_phrase('type'); ?></label>
                 <div class="select">
                   <select name="input_type_2" id="input_type_2" onchange="change_type_2(this.value)">
-                    <option value="0" selected>Pilih</option>
+                    <option value="0" selected></option>
                     <option value="1"><?= get_phrase('Perilaku dan Adab') ?></option>
                     <option value="2"><?= get_phrase('keagamaan') ?></option>
                   </select>
                 </div>
               </div>
             </div>
-            <!-- level 1 -->
+            <!-- LPA level 1 -->
             <div id="lpa_data" class="m-0 row d-none">
               <div class="col col-lg-4 col-md-4 col-sm-12 col-12">
                 <div class="form-group label-floating is-select">
@@ -426,7 +446,7 @@ list($start_date, $end_date) = x_week_range($date);
               </div>
               <div class="col col-lg-4 col-md-4 col-sm-12 col-12">
                 <div class="form-group label-floating is-select">
-                  <label class="control-label"><?php echo get_phrase('Melakukan tugas tanpa disuruh'); ?></label>
+                  <label class="control-label"><?php echo get_phrase('Melakukan tugas-tugas tanpa disuruh'); ?></label>
                   <div class="select">
                     <select name="adb_1d" id="adb_1d_holder">
                       <option value="0"></option>
@@ -777,7 +797,7 @@ list($start_date, $end_date) = x_week_range($date);
                 </div>
               </div>
             </div>
-            <!-- LK Level 1 -->
+            <!-- lk level 1 -->
             <div id="lk_data" class="col-12 m-0 p-0 row d-none">
               <?php
               $form_list = [
@@ -830,64 +850,51 @@ list($start_date, $end_date) = x_week_range($date);
             <div id="lpa_data_2" class="col-12 m-0 p-0 row d-none">
               <?php
               $form_list = [
-                ['name' => 'lpa_2-1', 'id' => 'lpa_2_1', 'text' => 'Mengikuti program pidato di hari Jumat', 'disable' => true],
-                ['name' => 'lpa_2-2', 'id' => 'lpa_2_2', 'text' => 'Mempresentasikan karya yang sedang dikerjakan setiap seminggu sekali', 'disable' => true],
-                ['name' => 'lpa_2-3', 'id' => 'lpa_2_3', 'text' => 'Berbahasa secara ahsan', 'disable' => true],
-                ['name' => 'lpa_2-4', 'id' => 'lpa_2_4', 'text' => 'Praktek karya ilmiah tentang makhluk hidup dan lingkungan sekitar', 'disable' => true],
-                ['name' => 'lpa_2-5', 'id' => 'lpa_2_5', 'text' => 'Memberikan minimal 3 hasil karya ilmiah/karangan/keterampilan dalam 1 semester', 'disable' => true],
+                ['name' => 'lpa_2-1', 'id' => 'lpa_2_1', 'text' => 'Mengikuti program pidato di hari Jumat'],
+                ['name' => 'lpa_2-2', 'id' => 'lpa_2_2', 'text' => 'Mempresentasikan karya yang sedang dikerjakan setiap seminggu sekali'],
+                ['name' => 'lpa_2-3', 'id' => 'lpa_2_3', 'text' => 'Berbahasa secara ahsan'],
+                ['name' => 'lpa_2-4', 'id' => 'lpa_2_4', 'text' => 'Praktek karya ilmiah tentang makhluk hidup dan lingkungan sekitar'],
+                ['name' => 'lpa_2-5', 'id' => 'lpa_2_5', 'text' => 'Memberikan minimal 3 hasil karya ilmiah/karangan/keterampilan dalam 1 semester'],
                 ['name' => 'lpa_2-6', 'id' => 'lpa_2_6', 'text' => 'Mengucapkan kalimat istirja ketika mendapat musibah'],
                 ['name' => 'lpa_2-7', 'id' => 'lpa_2_7', 'text' => 'Tidak tergesa-gesa'],
                 ['name' => 'lpa_2-8', 'id' => 'lpa_2_8', 'text' => 'Sabar'],
                 ['name' => 'lpa_2-9', 'id' => 'lpa_2_9', 'text' => 'Berbaik sangka'],
                 ['name' => 'lpa_2-10', 'id' => 'lpa_2_10', 'text' => 'Banyak istigfar'],
-                ['name' => 'lpa_2-11', 'id' => 'lpa_2_11', 'text' => 'Berdoa dengan doa yang baik'],
+                ['name' => 'lpa_2-11', 'id' => 'lpa_2_11', 'text' => 'Berdoa dengan doa-doa yang baik'],
                 ['name' => 'lpa_2-12', 'id' => 'lpa_2_12', 'text' => 'Tawakal'],
                 ['name' => 'lpa_2-13', 'id' => 'lpa_2_13', 'text' => 'Banyak berdzikir'],
                 ['name' => 'lpa_2-14', 'id' => 'lpa_2_14', 'text' => 'Menghindari makanan dan minuman yang instant dan mengandung pengawet'],
                 ['name' => 'lpa_2-15', 'id' => 'lpa_2_15', 'text' => 'Tidak berlebihan dalam makan, minum dan berpakaian'],
                 ['name' => 'lpa_2-16', 'id' => 'lpa_2_16', 'text' => 'Mengamalkan adab-adab Keislaman'],
-                ['name' => 'lpa_2-17', 'id' => 'lpa_2_17', 'text' => 'Melakukan kegiatan sosial setiap hari', 'disable' => true],
-                ['name' => 'lpa_2-18', 'id' => 'lpa_2_18', 'text' => 'Membaca buku minimal 1 tema/hari', 'disable' => true],
-                ['name' => 'lpa_2-19', 'id' => 'lpa_2_19', 'text' => 'Mengikuti kegiatan keagamaan', 'disable' => true],
+                ['name' => 'lpa_2-17', 'id' => 'lpa_2_17', 'text' => 'Melakukan kegiatan sosial setiap hari'],
+                ['name' => 'lpa_2-18', 'id' => 'lpa_2_18', 'text' => 'Membaca buku minimal 1 tema perhari'],
+                ['name' => 'lpa_2-19', 'id' => 'lpa_2_19', 'text' => 'Mengikuti kegiatan keagamaan'],
                 ['name' => 'lpa_2-20', 'id' => 'lpa_2_20', 'text' => 'Mempersiapkan dan merapihkan peralatannya sendiri'],
                 ['name' => 'lpa_2-21', 'id' => 'lpa_2_21', 'text' => 'Mengajak berbuat baik'],
-                ['name' => 'lpa_2-22', 'id' => 'lpa_2_22', 'text' => 'Mencegah/menasihati berbuat tercela'],
-                ['name' => 'lpa_2-23', 'id' => 'lpa_2_23', 'text' => 'Siap tampil menjadi pemimpin', 'disable' => true],
-                ['name' => 'lpa_2-24', 'id' => 'lpa_2_24', 'text' => 'Mengerjakan pekerjaan rumah dan tugas tugasnya'],
+                ['name' => 'lpa_2-22', 'id' => 'lpa_2_22', 'text' => 'Mencegah/menasihati perbuatan tercela'],
+                ['name' => 'lpa_2-23', 'id' => 'lpa_2_23', 'text' => 'Siap tampil menjadi pemimpin'],
+                ['name' => 'lpa_2-24', 'id' => 'lpa_2_24', 'text' => 'Mengerjakan pekerjaan rumah dan tugas-tugasnya'],
               ];
               foreach ($form_list as $data) {
-                if ($data['disable'] == false) {
               ?>
-                  <div class="col col-lg-4 col-md-4 col-sm-12 col-12">
-                    <div class="form-group label-floating is-select">
-                      <label class="control-label"><?= $data['text'] ?></label>
-                      <div class="select">
-                        <select name="<?= $data['name'] ?>" id="<?= $data['id'] ?>">
-                          <option value="0"></option>
-                          <option value="4">A</option>
-                          <option value="3">B</option>
-                          <option value="2">C</option>
-                          <option value="1">D</option>
-                        </select>
-                      </div>
-                      <span class="material-input"></span>
+                <div class="col col-lg-4 col-md-4 col-sm-12 col-12">
+                  <div class="form-group label-floating is-select">
+                    <label class="control-label"><?= $data['text'] ?></label>
+                    <div class="select">
+                      <select name="<?= $data['name'] ?>" id="<?= $data['id'] ?>">
+                        <option value="0"></option>
+                        <option value="4">A</option>
+                        <option value="3">B</option>
+                        <option value="2">C</option>
+                        <option value="1">D</option>
+                      </select>
                     </div>
+                    <span class="material-input"></span>
                   </div>
-                <?php
-                } else { ?>
-                  <div class="col col-lg-4 col-md-4 col-sm-12 col-12">
-                    <div class="form-group label-floating is-select">
-                      <label class="control-label"><?= $data['text'] ?></label>
-                      <div class="manual border border-secondary">
-                        <input type="text" name="text" readonly="">
-                        </input>
-                      </div>
-                      <span class="material-input"></span>
-                    </div>
-                  </div>
-              <?php }
-              } ?>
+                </div>
+              <?php } ?>
             </div>
+
             <!-- LK Level 2 -->
             <div id="lk_data_2" class="col-12 m-0 p-0 row d-none">
               <?php
@@ -896,110 +903,95 @@ list($start_date, $end_date) = x_week_range($date);
                 ['name' => 'sholat_rawatib', 'text' => 'Sholat Rawatib', 'manual' => true],
                 ['name' => 'sholat_dhuha', 'text' => 'Sholat Dhuha', 'manual' => true],
                 ['name' => 'sholat_tahajud', 'text' => 'Sholat Tahajud', 'manual' => true],
+                ['name' => 'setor_dalil', 'text' => 'Setor Dalil', 'manual' => true],
+                ['name' => 'menutup_aurat', 'text' => 'Menutup Aurat dan Berpakaian Sopan', 'gambar' => true],
+                ['name' => 'ilmu_fiqih', 'text' => 'Mengetahui Ilmu Fiqih Dasar', 'manual' => true],
                 ['name' => 'membaca_alquran', 'text' => 'Membaca Alquran Dengan Tartil', 'manual' => true],
+                ['name' => 'bahasa_arab', 'text' => 'Berbicara Bahasa Arab'],
                 ['name' => 'shaum', 'text' => 'Shaum Sunnah / Wajib', 'lima' => true],
-                ['name' => 'asmaulhusna', 'text' => 'Asmaulhusna & Terjemahannya', 'manual' => true],
-                ['name' => 'menutup_aurat', 'text' => 'Menutup Aurat dan Berpakaian Sopan', 'gambar' => true, 'disable' => true],
-                ['name' => 'ilmu_fiqih', 'text' => 'Mengetahui Ilmu Fiqih Dasar', 'manual' => true, 'disable' => true],
-                ['name' => 'bahasa_arab', 'text' => 'Berbicara Bahasa Arab', 'disable' => true],
-                ['name' => 'setor_dalil', 'text' => 'Setor Dalil', 'manual' => true, 'disable' => true],
+                ['name' => 'asmaulhusna', 'text' => 'Asmaulhusna & Terjemahannya', 'manual' => true]
               ];
               foreach ($form_list as $item) {
-                if ($item['disable'] == false) {
               ?>
-                  <div class="col col-lg-4 col-md-4 col-sm-12 col-12">
-                    <div class="form-group label-floating is-select">
-                      <label class="control-label"><?php echo get_phrase($item['text']); ?></label>
-                      <?php
-                      if ($item['manual']) {
-                      ?>
-                        <input type="number" name="<?= $item['name'] ?>">
-                      <?php
-                      } else if ($item['lima']) {
-                      ?>
-                        <div class="select">
-                          <select name="<?= $item['name'] ?>">
-                            <option value="0"></option>
-                            <option value="5">5</option>
-                          </select>
-                        </div>
-                      <?php
-                      } else if ($item['gambar']) {
-                      ?>
-                        <div class="select" onclick="select_aurat()">
-                          <div class="select-aurat"></div>
-                        </div>
-                        <div class="none select select-gambar">
-                          <div class="align-items-center d-flex form-input mb-4 mx-2" style="justify-content: flex-end;">
-                            <label for="aurat0" onclick="pilih()" style="text-align: center;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Tutup &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </label><input type="radio" id="aurat0" name="menutup_aurat" value="0" class="inline-block w-25 f-right none" style="flex-basis: 20px">
-                          </div>
-                          <div class="align-items-center d-flex form-input mb-4 mx-2">
-                            <label for="aurat1" onclick="pilih()"><img src="<?= base_url('assets/images/') ?>2_poin.png" alt="" width="50" height="100" class="mr-2"> Menutup rambut</label><input type="radio" id="aurat1" name="menutup_aurat" value="1" class="inline-block w-25 f-right none" style="flex-basis: 20px">
-                          </div>
-                          <div class="align-items-center d-flex form-input mb-4 mx-2">
-                            <label for="aurat2" onclick="pilih()"><img src="<?= base_url('assets/images/') ?>3_poin.png" alt="" width="50" height="100" class="mr-2"> Menutupi dada</label><input type="radio" id="aurat2" name="menutup_aurat" value="2" class="inline-block w-25 f-right none" style="flex-basis: 20px">
-                          </div>
-                          <div class="align-items-center d-flex form-input mb-4 mx-2">
-                            <label for="aurat3" onclick="pilih()"><img src="<?= base_url('assets/images/') ?>4_poin.png" alt="" width="50" height="100" class="mr-2"> Longgar/tidak transparan</label><input type="radio" id="aurat3" name="menutup_aurat" value="3" class="inline-block w-25 f-right none" style="flex-basis: 20px">
-                          </div>
-                          <div class="align-items-center d-flex form-input mb-4 mx-2">
-                            <label for="aurat4" onclick="pilih()"><img src="<?= base_url('assets/images/') ?>5_poin.png" alt="" width="50" height="100" class="mr-2"> Menutupi mata kaki</label><input type="radio" id="aurat4" name="menutup_aurat" value="4" class="inline-block w-25 f-right none" style="flex-basis: 20px">
-                          </div>
-                        </div>
-                      <?php
-                      } elseif ($item['sepuluh']) {
-                      ?>
-                        <div class="select">
-                          <select name="<?= $item['name'] ?>">
-                            <option value="0"></option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                          </select>
-                        </div>
-                      <?php
-                      } else {
-                      ?>
-                        <div class="select">
-                          <select name="<?= $item['name'] ?>">
-                            <option value="0"></option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                          </select>
-                        </div>
-                      <?php
-                      }
-                      ?>
-                      <span class="material-input"></span>
-                    </div>
-                  </div>
-                <?php
-                } else {
-                ?>
-                  <div class="col col-lg-4 col-md-4 col-sm-12 col-12">
-                    <div class="form-group label-floating is-select">
-                      <label class="control-label"><?= $item['text'] ?></label>
-                      <div class="manual border border-secondary">
-                        <input type="text" name="text" readonly="">
-                        </input>
+                <div class="col col-lg-4 col-md-4 col-sm-12 col-12">
+                  <div class="form-group label-floating is-select">
+                    <label class="control-label"><?php echo get_phrase($item['text']); ?></label>
+                    <?php
+                    if ($item['manual']) {
+                    ?>
+                      <input type="number" name="<?= $item['name'] ?>">
+                    <?php
+                    } else if ($item['lima']) {
+                    ?>
+                      <div class="select">
+                        <select name="<?= $item['name'] ?>">
+                          <option value="0"></option>
+                          <option value="5">5</option>
+                        </select>
                       </div>
-                      <span class="material-input"></span>
-                    </div>
+                    <?php
+                    } else if ($item['gambar']) {
+                    ?>
+                      <div class="select" onclick="select_aurat()">
+                        <div class="select-aurat"></div>
+                      </div>
+                      <div class="none select select-gambar">
+                        <div class="align-items-center d-flex form-input mb-4 mx-2">
+                          <label for="aurat0" onclick="pilih()">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Tutup &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </label><input type="radio" id="aurat0" name="menutup_aurat" class="inline-block w-25 f-right none" value="0" style="flex-basis: 20px">
+                        </div>
+                        <div class="align-items-center d-flex form-input mb-4 mx-2">
+                          <label for="aurat1" onclick="pilih()"><img src="<?= base_url('assets/images/') ?>2_poin.png" alt="" width="50" height="100" class="mr-2"> Menutup rambut</label><input type="radio" id="aurat1" name="menutup_aurat" value="1" class="inline-block w-25 f-right none" style="flex-basis: 20px">
+                        </div>
+                        <div class="align-items-center d-flex form-input mb-4 mx-2">
+                          <label for="aurat2" onclick="pilih()"><img src="<?= base_url('assets/images/') ?>3_poin.png" alt="" width="50" height="100" class="mr-2"> Menutupi dada</label><input type="radio" id="aurat2" name="menutup_aurat" value="2" class="inline-block w-25 f-right none" style="flex-basis: 20px">
+                        </div>
+                        <div class="align-items-center d-flex form-input mb-4 mx-2">
+                          <label for="aurat3" onclick="pilih()"><img src="<?= base_url('assets/images/') ?>4_poin.png" alt="" width="50" height="100" class="mr-2"> Longgar/tidak transparan</label><input type="radio" id="aurat3" name="menutup_aurat" value="3" class="inline-block w-25 f-right none" style="flex-basis: 20px">
+                        </div>
+                        <div class="align-items-center d-flex form-input mb-4 mx-2">
+                          <label for="aurat4" onclick="pilih()"><img src="<?= base_url('assets/images/') ?>5_poin.png" alt="" width="50" height="100" class="mr-2"> Menutupi mata kaki</label><input type="radio" id="aurat4" name="menutup_aurat" value="4" class="inline-block w-25 f-right none" style="flex-basis: 20px">
+                        </div>
+                      </div>
+                      <?php
+                    } elseif($item['sepuluh']){
+                    ?> 
+                    <div class="select">
+                        <select name="<?= $item['name'] ?>">
+                          <option value="0"></option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                          <option value="7">7</option>
+                          <option value="8">8</option>
+                          <option value="9">9</option>
+                          <option value="10">10</option>
+                        </select>
+                      </div>
+                    <?php
+                    } else {
+                    ?>
+                      <div class="select">
+                        <select name="<?= $item['name'] ?>">
+                          <option value="0"></option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                      </div>
+                    <?php
+                    }
+                    ?>
+                    <span class="material-input"></span>
                   </div>
-              <?php }
-              } ?>
-
-
+                </div>
+              <?php
+              }
+              ?>
             </div>
           </div>
           <div class="form-buttons-w text-right">
@@ -1012,10 +1004,60 @@ list($start_date, $end_date) = x_week_range($date);
   </div>
 </div>
 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+<script>
+	var ctx = document.getElementById("myChart");
+  console.log(<?= $jumlah_lk ?>);
+	var myChart = new Chart(ctx, {
+		type: 'pie',
+		data: {
+			labels: ["Level 1 ", "Level 2 "],
+			datasets: [{
+				label: '#',
+				data: [<?= $jumlah_lk != false ? $jumlah_lk : 0 ?>, <?= $jumlah_lk2 != false ? $jumlah_lk2 : 0 ?>  ],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.7)',
+					'rgba(54, 162, 235, 0.7)'
+				],
+				borderColor: [
+					'rgba(255,99,132,1)',
+					'rgba(54, 162, 235, 1)'
+				],
+				borderWidth: 0
+			}]
+		},
+
+	});
+</script>
+<script>
+	var ctx = document.getElementById("myChart2");
+	var myChart = new Chart(ctx, {
+		type: 'pie',
+		data: {
+			labels: ["Level 1", "Level 2"],
+			datasets: [{
+				label: '#',
+				data: [<?= $jumlah_nilai1 != false ? $jumlah_nilai1 : 0; ?>, <?= $jumlah_nilai2 != false ? $jumlah_nilai2 : 0; ?>],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.7)',
+					'rgba(54, 162, 235, 0.7)'
+				],
+				borderColor: [
+					'rgba(255,99,132,1)',
+					'rgba(54, 162, 235, 1)'
+				],
+				borderWidth: 0
+			}]
+		},
+
+	});
+</script>
 
 
 <script type="text/javascript">
+  
   function get_class_sections(class_id) {
+    console.log('test', class_id);
     $.ajax({
       url: '<?php echo base_url(); ?>parents/get_class_section/' + class_id,
       success: function(response) {
@@ -1033,23 +1075,29 @@ list($start_date, $end_date) = x_week_range($date);
     });
   }
 
+  function type_section(type) {
+    switch (type) {
+      case '15':
+      case '5':
+      case '7':
+        $('#section_1').addClass('d-none');
+        $('#section_2').removeClass('d-none');
+        break;
+      default:
+        $('#section_2').addClass('d-none');
+        $('#section_1').removeClass('d-none');
+        break;
+    }
+  }
+
   function get_lpa_lk_data(student_id) {
-    var level = $('#section_selector_holder').val();
+    var section = $('#section_selector_holder').val();
+    var level = section <= 3 ? 1 : 2;
     $.ajax({
-      url: '<?php echo base_url(); ?>parents/get_lpa_lk_data/' + student_id,
+      url: '<?php echo base_url(); ?>parents/get_lpa_lk_data/' + student_id + '?level=' + level,
       success: function(data) {
-        switch (data.level) {
-          case 2:
-            $('#section_1').addClass('d-none');
-            $('#section_2').removeClass('d-none');
-            break;
-          default:
-            $('#section_2').addClass('d-none');
-            $('#section_1').removeClass('d-none');
-            break;
-        }
         if (data) {
-          if (data.level == 2) {
+          if (level == 2) {
             $('#lpa_2_1').val(data.lpa_2_1)
             $('#lpa_2_2').val(data.lpa_2_2)
             $('#lpa_2_3').val(data.lpa_2_3)

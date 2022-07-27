@@ -16,6 +16,15 @@ list($start_date, $end_date) = x_week_range($date);
           <li class="navs-item">
             <a class="navs-links active" href="<?php echo base_url(); ?>student/karakter_building/"><i class="os-icon picons-thin-icon-thin-0724_policeman_security"></i><span><?php echo get_phrase('character building'); ?></span></a>
           </li>
+          <li class="navs-item">
+            <a class="navs-links" href="<?php echo base_url(); ?>student/forum_konseling/"><i class="os-icon picons-thin-icon-thin-0281_chat_message_discussion_bubble_reply_conversation"></i><span>Forum Diskusi</span></a>
+          </li>
+          <li class="navs-item">
+            <a class="navs-links" href="<?php echo base_url(); ?>student/request_student/"><i class="os-icon picons-thin-icon-thin-0389_gavel_hammer_law_judge_court"></i><span><?php echo get_phrase('reports'); ?></span></a>
+          </li>
+          <li class="navs-item">
+            <a class="navs-links" href="<?php echo base_url(); ?>student/meet_konseling/"><i class="os-icon picons-thin-icon-thin-0591_presentation_video_play_beamer"></i><span><?php echo get_phrase('live'); ?></span></a>
+          </li>
         </ul>
       </div>
     </div>
@@ -32,6 +41,9 @@ list($start_date, $end_date) = x_week_range($date);
         <div class="arrow-left mr-2" style="float: left;">
           <a href="<?= base_url('student/karakter_building/' . ($week ? $week - 1 : '-1')) ?>" class="btn btn-block btn-outline-primary withripple">Sebelumnya</a>
         </div>
+        <!-- <div class="arrow-today mr-2">
+          <a href="<?= base_url('student/karakter_building/') ?>" class="btn btn-block btn-primary withripple">Minggu ini</a>
+        </div> -->
         <div class="arrow-right mr-2" style="float: right;">
           <a href="<?= base_url('student/karakter_building/' . ($week ? $week + 1 : '1')) ?>" class="btn btn-block btn-outline-primary withripple">Selanjutnya</a>
         </div>
@@ -52,6 +64,21 @@ list($start_date, $end_date) = x_week_range($date);
       <div class="tab-content ">
         <div class="tab-pane active" id="data">
           <div class="element-wrapper">
+            <div class="element-header">
+              <div class="row">
+                  <div class="col-sm-3" style="border: 1px solid #eee; max-width:20% !important">
+										<h5 class="form-header">Lembar Keagamaan</h5>
+										<canvas id="myChart" width="400" height="400" style="display: block; width: 401px; height: 401px;" class="chartjs-render-monitor"></canvas>
+									</div>
+                  <div class="col-sm-3" style="border: 1px solid #eee; max-width:20% !important">
+										<h5 class="form-header">Lembar Perilaku Adab</h5>
+										<canvas id="myChart2" width="400" height="400" style="display: block; width: 401px; height: 401px;" class="chartjs-render-monitor"></canvas>
+									</div>
+              </div>
+              <?php
+              // }
+              ?>
+            </div>
             <div class="element-box-tp">
               <div class="table-responsive">
                 <table class="table table-padded">
@@ -65,22 +92,16 @@ list($start_date, $end_date) = x_week_range($date);
                   </thead>
                   <tbody>
                     <?php
-                    $result = $this->db->query("SELECT count(DISTINCT date) as date_count, `build_id`, `build`.`student_id`, `build`.`user_id`, `build`.`class_id`, `build`.`section_id`, AVG(NULLIF(adb_1a, 0)) AS adb_1a, AVG(NULLIF(adb_1b, 0)) AS adb_1b, AVG(NULLIF(adb_1c, 0)) AS adb_1c, AVG(NULLIF(adb_1d, 0)) AS adb_1d, AVG(NULLIF(adb_2a, 0)) AS adb_2a, AVG(NULLIF(adb_2b, 0)) AS adb_2b, AVG(NULLIF(adb_2c, 0)) AS adb_2c, AVG(NULLIF(adb_2d, 0)) AS adb_2d, AVG(NULLIF(adb_2e, 0)) AS adb_2e, AVG(NULLIF(adb_3a, 0)) AS adb_3a, AVG(NULLIF(adb_3b, 0)) AS adb_3b, AVG(NULLIF(adb_4a, 0)) AS adb_4a, AVG(NULLIF(adb_4b, 0)) AS adb_4b, AVG(NULLIF(adb_5a, 0)) AS adb_5a, AVG(NULLIF(adb_5b, 0)) AS adb_5b, AVG(NULLIF(adb_6a, 0)) AS adb_6a, AVG(NULLIF(adb_6b, 0)) AS adb_6b, AVG(NULLIF(adb_6c, 0)) AS adb_6c, AVG(NULLIF(adb_6d, 0)) AS adb_6d, AVG(NULLIF(adb_7a, 0)) AS adb_7a, AVG(NULLIF(adb_7b, 0)) AS adb_7b, AVG(NULLIF(adb_7c, 0)) AS adb_7c, AVG(NULLIF(adb_7d, 0)) AS adb_7d, AVG(NULLIF(adb_7e, 0)) AS adb_7e, AVG(NULLIF(adb_8a, 0)) AS adb_8a, AVG(NULLIF(adb_8b, 0)) AS adb_8b, AVG(NULLIF(adb_9a, 0)) AS adb_9a, AVG(NULLIF(adb_9b, 0)) AS adb_9b, lk_sholat_shubuh, lk_sholat_dzuhur, lk_shalat_ashar, lk_shalat_magrib, lk_shalat_isya, lk_membaca_asmaul_husna, lk_mengenal_kosakata_arab, lk_hafal_doa, lk_mengikuti_kajian, lk_membaca_quran FROM `build`
-                    LEFT JOIN( SELECT student_id, SUM(sholat_shubuh) AS lk_sholat_shubuh, SUM(sholat_dzuhur) AS lk_sholat_dzuhur, SUM(shalat_ashar) AS lk_shalat_ashar, SUM(shalat_magrib) AS lk_shalat_magrib, SUM(shalat_isya) AS lk_shalat_isya, SUM(membaca_asmaul_husna) AS lk_membaca_asmaul_husna, SUM(mengenal_kosakata_arab) AS lk_mengenal_kosakata_arab, SUM(hafal_doa) AS lk_hafal_doa, SUM(mengikuti_kajian) AS lk_mengikuti_kajian, SUM(membaca_quran) AS lk_membaca_quran FROM 
-                    (SELECT student_id, AVG(NULLIF(sholat_shubuh, 0)) AS sholat_shubuh, AVG(NULLIF(sholat_dzuhur, 0)) AS sholat_dzuhur, AVG(NULLIF(shalat_ashar, 0)) AS shalat_ashar, AVG(NULLIF(shalat_magrib, 0)) AS shalat_magrib, AVG(NULLIF(shalat_isya, 0)) AS shalat_isya, AVG(NULLIF(membaca_asmaul_husna, 0)) AS membaca_asmaul_husna, AVG(NULLIF(mengenal_kosakata_arab, 0)) AS mengenal_kosakata_arab, AVG(NULLIF(hafal_doa, 0)) AS hafal_doa, AVG(NULLIF(mengikuti_kajian, 0)) AS mengikuti_kajian, AVG(NULLIF(membaca_quran, 0)) AS membaca_quran FROM `keagamaan` WHERE `date` >= '$start_date' AND `date` <= '$end_date' GROUP BY `student_id`, `date`) as k group by student_id) AS lk
-                    ON lk.student_id = build.student_id WHERE `build`.`date` >= '$start_date' AND `build`.`date` <= '$end_date' GROUP BY `build`.`student_id`")->result_array();
-
-                    $result2 = $this->db->query("SELECT count(DISTINCT date) as date_count, `build_id`, `build2`.`student_id`, `build2`.`user_id`, `build2`.`class_id`, `build2`.`section_id`, AVG(NULLIF(lpa_2_1, 0)) AS lpa_2_1, AVG(NULLIF(lpa_2_24, 0)) AS lpa_2_24, AVG(NULLIF(lpa_2_2, 0)) AS lpa_2_2, AVG(NULLIF(lpa_2_4, 0)) AS lpa_2_4, AVG(NULLIF(lpa_2_5, 0)) AS lpa_2_5, AVG(NULLIF(lpa_2_6, 0)) AS lpa_2_6, AVG(NULLIF(lpa_2_7, 0)) AS lpa_2_7, AVG(NULLIF(lpa_2_8, 0)) AS lpa_2_8, AVG(NULLIF(lpa_2_9, 0)) AS lpa_2_9, AVG(NULLIF(lpa_2_10, 0)) AS lpa_2_10, AVG(NULLIF(lpa_2_11, 0)) AS lpa_2_11, AVG(NULLIF(lpa_2_12, 0)) AS lpa_2_12, AVG(NULLIF(lpa_2_13, 0)) AS lpa_2_13, AVG(NULLIF(lpa_2_14, 0)) AS lpa_2_14, AVG(NULLIF(lpa_2_15, 0)) AS lpa_2_15, AVG(NULLIF(lpa_2_16, 0)) AS lpa_2_16, AVG(NULLIF(lpa_2_17, 0)) AS lpa_2_17, AVG(NULLIF(lpa_2_18, 0)) AS lpa_2_18, AVG(NULLIF(lpa_2_19, 0)) AS lpa_2_19, AVG(NULLIF(lpa_2_20, 0)) AS lpa_2_20, AVG(NULLIF(lpa_2_21, 0)) AS lpa_2_21, AVG(NULLIF(lpa_2_22, 0)) AS lpa_2_22, AVG(NULLIF(lpa_2_23, 0)) AS lpa_2_23, lk_sholat_wajib, lk_sholat_rawatib, lk_sholat_dhuha, lk_sholat_tahajud, lk_setor_dalil, lk_menutup_aurat, lk_ilmu_fiqih, lk_membaca_alquran, lk_bahasa_arab, lk_shaum,lk_asmaulhusna FROM `build2` LEFT JOIN( SELECT student_id, SUM(sholat_wajib) AS lk_sholat_wajib, SUM(sholat_rawatib) AS lk_sholat_rawatib, SUM(sholat_dhuha) AS lk_sholat_dhuha, SUM(sholat_tahajud) AS lk_sholat_tahajud, SUM(setor_dalil) AS lk_setor_dalil, SUM(menutup_aurat) AS lk_menutup_aurat, SUM(ilmu_fiqih) AS lk_ilmu_fiqih, SUM(membaca_alquran) AS lk_membaca_alquran, SUM(bahasa_arab) AS lk_bahasa_arab, SUM(shaum) AS lk_shaum, SUM(asmaulhusna) AS lk_asmaulhusna FROM (SELECT student_id, AVG(NULLIF(sholat_wajib, 0)) AS sholat_wajib, AVG(NULLIF(sholat_rawatib, 0)) AS sholat_rawatib, AVG(NULLIF(sholat_dhuha, 0)) AS sholat_dhuha, AVG(NULLIF(sholat_tahajud, 0)) AS sholat_tahajud, AVG(NULLIF(setor_dalil, 0)) AS setor_dalil, AVG(NULLIF(menutup_aurat, 0)) AS menutup_aurat, AVG(NULLIF(ilmu_fiqih, 0)) AS ilmu_fiqih, AVG(NULLIF(membaca_alquran, 0)) AS membaca_alquran, AVG(NULLIF(bahasa_arab, 0)) AS bahasa_arab, AVG(NULLIF(shaum, 0)) AS shaum, AVG(NULLIF(asmaulhusna,0)) AS asmaulhusna FROM `keagamaan2` WHERE `date` >= '$start_date' AND `date` <= '$end_date' GROUP BY `student_id`, `date`) as k group by student_id) AS lk ON lk.student_id = build2.student_id WHERE `build2`.`date` >= '$start_date' AND `build2`.`date` <= '$end_date' GROUP BY `build2`.`student_id`")->result_array();
 
                     // level 1
                     foreach ($result as $key => $row) {
-                      $jumlah_nilai = 0;
+                      $jumlah_nilai1 = 0;
                       $jumlah_jenis = 0;
                       $jumlah_lk = 0;
                       $jumlah_hari_kosong = ($week ? 7 : date('N')) - $row['date_count'];
                       foreach ($row as $kode => $nilai) {
                         if (strpos($kode, 'adb_') === 0) {
-                          $jumlah_nilai += $nilai;
+                          $jumlah_nilai1 += $nilai;
                           $jumlah_jenis++;
                         } else if (strpos($kode, 'lk_') === 0) {
                           $jumlah_lk += round($nilai);
@@ -89,7 +110,7 @@ list($start_date, $end_date) = x_week_range($date);
                       if ($jumlah_hari_kosong) {
                         $jumlah_jenis = $jumlah_jenis * $jumlah_hari_kosong;
                       }
-                      $rata2_lpa = $jumlah_nilai / $jumlah_jenis;
+                      $rata2_lpa = $jumlah_nilai1 / $jumlah_jenis;
                       $result[$key]['rata2_lpa'] = $rata2_lpa;
                       $result[$key]['rata2_lpa_round'] = round($rata2_lpa);
                       $result[$key]['jumlah_lk'] = round($jumlah_lk);
@@ -100,31 +121,34 @@ list($start_date, $end_date) = x_week_range($date);
 
                     //level2
                     foreach ($result2 as $key => $row) {
-                      $jumlah_nilai = 0;
+                      $jumlah_nilai2 = 0;
                       $jumlah_jenis = 0;
-                      $jumlah_lk = 0;
+                      $jumlah_lk2 = 0;
                       $jumlah_hari_kosong = ($week ? 7 : date('N')) - $row['date_count'];
                       foreach ($row as $kode => $nilai) {
                         if (strpos($kode, 'lpa_') === 0) {
-                          $jumlah_nilai += $nilai;
+                          $jumlah_nilai2 += $nilai;
                           $jumlah_jenis++;
                         } else if (strpos($kode, 'lk_') === 0) {
-                          $jumlah_lk += round($nilai);
+                          $jumlah_lk2 += round($nilai);
                         }
                       }
                       if ($jumlah_hari_kosong) {
                         $jumlah_jenis = $jumlah_jenis * $jumlah_hari_kosong;
                       }
-                      $rata2_lpa = $jumlah_nilai / $jumlah_jenis;
+                      $rata2_lpa = $jumlah_nilai2 / $jumlah_jenis;
                       $result2[$key]['rata2_lpa'] = $rata2_lpa;
                       $result2[$key]['rata2_lpa_round'] = round($rata2_lpa);
-                      $result2[$key]['jumlah_lk'] = round($jumlah_lk);
+                      $result2[$key]['jumlah_lk'] = round($jumlah_lk2);
                     }
                     $lpa_value = array_column($result2, 'rata2_lpa_round');
                     $lk_value = array_column($result2, 'jumlah_lk');
                     array_multisort($lpa_value, SORT_DESC, $lk_value, SORT_DESC, $result2);
+
                     //level 2
                     foreach ($result2 as $row2) {
+                      $param_for_edit = base64_encode($row2['class_id'].'-'.$row2['section_id'].'-'.$row2['student_id']);
+                      $cek_data = $this->db->get_where('build2', array('user_id' => 'student-'.$this->session->userdata('login_user_id'), 'date' => $date))->row();
                     ?>
                       <tr>
                         <td><span><?php echo $this->db->get_where('enroll', array('student_id' => $row2['student_id']))->row()->roll; ?></span></td>
@@ -136,8 +160,11 @@ list($start_date, $end_date) = x_week_range($date);
                       </tr>
                     <?php
                     }
+
                     //level 1
                     foreach ($result as $row) {
+                      $param_for_edit = base64_encode($row['class_id'].'-'.$row['section_id'].'-'.$row['student_id']);
+                      $cek_data = $this->db->get_where('build', array('user_id' => 'student-'.$this->session->userdata('login_user_id'), 'date' => $date))->row();
                     ?>
                       <tr>
                         <td><span><?php echo $this->db->get_where('enroll', array('student_id' => $row['student_id']))->row()->roll; ?></span></td>
@@ -174,27 +201,6 @@ list($start_date, $end_date) = x_week_range($date);
                   </thead>
                   <tbody>
                     <?php
-                    $date = date('Y-m-d');
-                    if ($week) {
-                      $date = date('Y-m-d', strtotime($week . ' week'));
-                    }
-                    list($start_date, $end_date) = x_week_range($date);
-                    // sql level 2
-                    $this->db->where('date >=', $start_date);
-                    $this->db->where('date <=', $end_date);
-                    $sqlLPA2 = $this->db->get('build2')->result_array();
-                    $this->db->where('date >=', $start_date);
-                    $this->db->where('date <=', $end_date);
-                    $sqlLK2 = $this->db->get('keagamaan2')->result_array();
-
-                    // sql level 1
-                    $this->db->where('date >=', $start_date);
-                    $this->db->where('date <=', $end_date);
-                    $sqlLPA = $this->db->get('build')->result_array();
-                    $this->db->where('date >=', $start_date);
-                    $this->db->where('date <=', $end_date);
-                    $sqlLK = $this->db->get('keagamaan')->result_array();
-
 
                     // level2
                     foreach ($sqlLPA2 as $key => $data) :
@@ -223,22 +229,22 @@ list($start_date, $end_date) = x_week_range($date);
 
                       // lk
                       $lk = $sqlLK2[$key];
-                      $jumlah_lk = 0;
+                      $jumlah_lk2 = 0;
                       $angka_terisi = 0;
                       $indikators = array_slice(array_keys($lk), 6);
                       foreach ($indikators as $indikator) {
                         if ($lk[$indikator] != 0) $angka_terisi++;
 
-                        $jumlah_lk += $lk[$indikator];
+                        $jumlah_lk2 += $lk[$indikator];
                       }
-                    ?>
+                      ?>
                       <tr>
                         <td><?= $data['date'] ?></td>
                         <td><img alt="" src="<?php echo $this->crud_model->get_image_url($tabel, $tes[0]->user_id); ?>" style="height: 25px; border-radius:50%;" class="purple"><span> <?php echo $this->crud_model->get_name($tabel, $tes[0]->user_id); ?></span></td>
                         <td><img alt="" src="<?php echo $this->crud_model->get_image_url('student', $data['student_id']); ?>" style="height: 25px; border-radius:50%;" class="purple"><span> <?php echo $this->crud_model->get_name('student', $data['student_id']); ?></span></td>
                         <td><?= $this->db->get_where('section', array('section_id' => $data['section_id']))->row()->name; ?></td>
                         <td><?= to_abj($hasillpa2); ?></td>
-                        <td><?= $jumlah_lk ?></td>
+                        <td><?= $jumlah_lk2 ?></td>
                       </tr>
                     <?php endforeach; ?>
                     <?php
@@ -269,8 +275,8 @@ list($start_date, $end_date) = x_week_range($date);
 
                       $id = $data['user_id'];
                       $tes = $this->db->query("SELECT SUBSTR('$id', POSITION('-' IN '$id')+1) AS user_id, SUBSTR('$id',1, POSITION('-' IN '$id')-1) AS user_type")->result();
-                      if ($tes[0]->user_type == 'admin') {
-                        $tabel = 'admin';
+                      if ($tes[0]->user_type == 'student') {
+                        $tabel = 'student';
                       } else if ($tes[0]->user_type == 'teacher') {
                         $tabel = 'teacher';
                       } else if ($tes[0]->user_type == 'parent') {
@@ -279,24 +285,25 @@ list($start_date, $end_date) = x_week_range($date);
 
                       // lk
                       $lk = $sqlLK[$key];
-                      $jumlah_lk = 0;
+                      $jumlah_lk1 = 0;
                       $angka_terisi = 0;
                       $indikators = array_slice(array_keys($lk), 6);
                       foreach ($indikators as $indikator) {
                         if ($lk[$indikator] != 0) $angka_terisi++;
 
-                        $jumlah_lk += $lk[$indikator];
+                        $jumlah_lk1 += $lk[$indikator];
                       }
                     ?>
                       <tr>
                         <td><?= $data['date'] ?></td>
-                        <td><img alt="" src="<?php echo $this->crud_model->get_image_url($tabel, $tes[0]->user_id); ?>" style="height: 25px; border-radius:50%;" class="purple"><span> <?php echo $this->crud_model->get_name($tabel, $tes[0]->user_id); ?></span></td>
-                        <td><img alt="" src="<?php echo $this->crud_model->get_image_url('student', $data['student_id']); ?>" style="height: 25px; border-radius:50%;" class="purple"><span> <?php echo $this->crud_model->get_name('student', $data['student_id']); ?></span></td>
+                        <td><img alt="" src="<?php echo $this->crud_model->get_image_url($tabel, $tes[0]->user_id); ?>" style="height: 25px; border-radius:50%;" class="purple" ><span> <?php echo $this->crud_model->get_name($tabel, $tes[0]->user_id); ?></span></td>
+                        <td><img alt="" src="<?php echo $this->crud_model->get_image_url('student', $data['student_id']); ?>" style="height: 25px; border-radius:50%;" class="purple" ><span> <?php echo $this->crud_model->get_name('student', $data['student_id']); ?></span></td>
                         <td><?= $this->db->get_where('section', array('section_id' => $data['section_id']))->row()->name; ?></td>
                         <td><?= to_abj($hasillpa) ?></td>
-                        <td><?= $jumlah_lk ?></td>
+                        <td><?= $jumlah_lk1 ?></td>
                       </tr>
                     <?php endforeach; ?>
+                    
                   </tbody>
                 </table>
               </div>
@@ -308,3 +315,243 @@ list($start_date, $end_date) = x_week_range($date);
   </div>
   <div class="display-type"></div>
 </div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+<script>
+	var ctx = document.getElementById("myChart");
+  console.log(<?= $jumlah_lk ?>);
+	var myChart = new Chart(ctx, {
+		type: 'pie',
+		data: {
+			labels: ["Level 1 ", "Level 2 "],
+			datasets: [{
+				label: '#',
+				data: [<?= $jumlah_lk != false ? $jumlah_lk : 0 ?>, <?= $jumlah_lk2 != false ? $jumlah_lk2 : 0 ?>  ],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.7)',
+					'rgba(54, 162, 235, 0.7)'
+				],
+				borderColor: [
+					'rgba(255,99,132,1)',
+					'rgba(54, 162, 235, 1)'
+				],
+				borderWidth: 0
+			}]
+		},
+
+	});
+</script>
+<script>
+	var ctx = document.getElementById("myChart2");
+	var myChart = new Chart(ctx, {
+		type: 'pie',
+		data: {
+			labels: ["Level 1", "Level 2"],
+			datasets: [{
+				label: '#',
+				data: [<?= $jumlah_nilai1 != false ? $jumlah_nilai1 : 0; ?>, <?= $jumlah_nilai2 != false ? $jumlah_nilai2 : 0; ?>],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.7)',
+					'rgba(54, 162, 235, 0.7)'
+				],
+				borderColor: [
+					'rgba(255,99,132,1)',
+					'rgba(54, 162, 235, 1)'
+				],
+				borderWidth: 0
+			}]
+		},
+
+	});
+</script>
+
+
+<script type="text/javascript">
+  
+  function get_class_sections(class_id) {
+    console.log('test', class_id);
+    $.ajax({
+      url: '<?php echo base_url(); ?>student/get_class_section/' + class_id,
+      success: function(response) {
+        jQuery('#section_selector_holder').html(response);
+      }
+    });
+  }
+
+  function get_class_students(class_id) {
+    $.ajax({
+      url: '<?php echo base_url(); ?>student/get_class_stundets/' + class_id,
+      success: function(response) {
+        jQuery('#students_holder').html(response);
+      }
+    });
+  }
+
+  function type_section(type) {
+    switch (type) {
+      case '15':
+      case '5':
+      case '7':
+        $('#section_1').addClass('d-none');
+        $('#section_2').removeClass('d-none');
+        break;
+      default:
+        $('#section_2').addClass('d-none');
+        $('#section_1').removeClass('d-none');
+        break;
+    }
+  }
+
+  function get_lpa_lk_data(student_id) {
+    var section = $('#section_selector_holder').val();
+    var level = section <= 3 ? 1 : 2;
+    $.ajax({
+      url: '<?php echo base_url(); ?>student/get_lpa_lk_data/' + student_id + '?level=' + level,
+      success: function(data) {
+        if (data) {
+          if (level == 2) {
+            $('#lpa_2_1').val(data.lpa_2_1)
+            $('#lpa_2_2').val(data.lpa_2_2)
+            $('#lpa_2_3').val(data.lpa_2_3)
+            $('#lpa_2_4').val(data.lpa_2_4)
+            $('#lpa_2_5').val(data.lpa_2_5)
+            $('#lpa_2_6').val(data.lpa_2_6)
+            $('#lpa_2_7').val(data.lpa_2_7)
+            $('#lpa_2_8').val(data.lpa_2_8)
+            $('#lpa_2_9').val(data.lpa_2_9)
+            $('#lpa_2_10').val(data.lpa_2_10)
+            $('#lpa_2_11').val(data.lpa_2_11)
+            $('#lpa_2_12').val(data.lpa_2_12)
+            $('#lpa_2_13').val(data.lpa_2_13)
+            $('#lpa_2_14').val(data.lpa_2_14)
+            $('#lpa_2_15').val(data.lpa_2_15)
+            $('#lpa_2_16').val(data.lpa_2_16)
+            $('#lpa_2_17').val(data.lpa_2_17)
+            $('#lpa_2_18').val(data.lpa_2_18)
+            $('#lpa_2_19').val(data.lpa_2_19)
+            $('#lpa_2_20').val(data.lpa_2_20)
+            $('#lpa_2_21').val(data.lpa_2_21)
+            $('#lpa_2_22').val(data.lpa_2_22)
+            $('#lpa_2_23').val(data.lpa_2_23)
+            $('#lpa_2_24').val(data.lpa_2_24)
+            if (data.lk_id) {
+              $('#lk_data_2 [name="sholat_wajib"]').val(data.sholat_wajib)
+              $('#lk_data_2 [name="sholat_rawatib"]').val(data.sholat_rawatib)
+              $('#lk_data_2 [name="sholat_dhuha"]').val(data.sholat_dhuha)
+              $('#lk_data_2 [name="sholat_tahajud"]').val(data.sholat_tahajud)
+              $('#lk_data_2 [name="setor_dalil"]').val(data.setor_dalil)
+              $('.select-gambar [name="menutup_aurat"][value="' + data.menutup_aurat + '"]').click()
+              $('#lk_data_2 [name="ilmu_fiqih"]').val(data.ilmu_fiqih)
+              $('#lk_data_2 [name="membaca_alquran"]').val(data.membaca_alquran)
+              $('#lk_data_2 [name="bahasa_arab"]').val(data.bahasa_arab)
+              $('#lk_data_2 [name="shaum"]').val(data.shaum)
+              $('#lk_data_2 [name="asmaulhusna"]').val(data.asmaulhusna)
+            } else {
+              $('#lk_data_2 [input="number"],#lk_data_2 select').val(0);
+            }
+          } else {
+            $('#adb_1a_holder').val(data.adb_1a)
+            $('#adb_1b_holder').val(data.adb_1b)
+            $('#adb_1c_holder').val(data.adb_1c)
+            $('#adb_1d_holder').val(data.adb_1d)
+            $('#adb_2a_holder').val(data.adb_2a)
+            $('#adb_2b_holder').val(data.adb_2b)
+            $('#adb_2c_holder').val(data.adb_2c)
+            $('#adb_2d_holder').val(data.adb_2d)
+            $('#adb_2e_holder').val(data.adb_2e)
+            $('#adb_3a_holder').val(data.adb_3a)
+            $('#adb_3b_holder').val(data.adb_3b)
+            $('#adb_4a_holder').val(data.adb_4a)
+            $('#adb_4b_holder').val(data.adb_4b)
+            $('#adb_5a_holder').val(data.adb_5a)
+            $('#adb_5b_holder').val(data.adb_5b)
+            $('#adb_6a_holder').val(data.adb_6a)
+            $('#adb_6b_holder').val(data.adb_6b)
+            $('#adb_6c_holder').val(data.adb_6c)
+            $('#adb_6d_holder').val(data.adb_6d)
+            $('#adb_7a_holder').val(data.adb_7a)
+            $('#adb_7b_holder').val(data.adb_7b)
+            $('#adb_7c_holder').val(data.adb_7c)
+            $('#adb_7d_holder').val(data.adb_7d)
+            $('#adb_7e_holder').val(data.adb_7e)
+            $('#adb_8a_holder').val(data.adb_8a)
+            $('#adb_8b_holder').val(data.adb_8b)
+            $('#adb_9a_holder').val(data.adb_9a)
+            $('#adb_9b_holder').val(data.adb_9b)
+            if (data.lk_id) {
+              $('#lk_data [name="sholat_shubuh"]').val(data.sholat_shubuh)
+              $('#lk_data [name="sholat_dzuhur"]').val(data.sholat_dzuhur)
+              $('#lk_data [name="shalat_ashar"]').val(data.shalat_ashar)
+              $('#lk_data [name="shalat_magrib"]').val(data.shalat_magrib)
+              $('#lk_data [name="shalat_isya"]').val(data.shalat_isya)
+              $('#lk_data [name="membaca_asmaul_husna"]').val(data.membaca_asmaul_husna)
+              $('#lk_data [name="mengenal_kosakata_arab"]').val(data.mengenal_kosakata_arab)
+              $('#lk_data [name="hafal_doa"]').val(data.hafal_doa)
+              $('#lk_data [name="mengikuti_kajian"]').val(data.mengikuti_kajian)
+              $('#lk_data [name="membaca_quran"]').val(data.membaca_quran)
+            } else {
+              $('#lk_data [input="number"],#lk_data select').val(0);
+            }
+          }
+        } else {
+          $('#addroutine .col-lg-4 select').val(0)
+          $('#lk_data [input="number"],#lk_data select').val(0);
+        }
+      }
+    });
+  }
+
+  function change_type(type) {
+    switch (type) {
+      case '0':
+        $('#lpa_data').addClass('d-none');
+        $('#lk_data').addClass('d-none');
+        break;
+      case '1':
+        $('#lk_data').addClass('d-none');
+        $('#lpa_data').removeClass('d-none');
+        $('#lpa_data_2').addClass('d-none');
+        $('#lk_data_2').addClass('d-none');
+        break;
+      case '2':
+        $('#lpa_data').addClass('d-none');
+        $('#lk_data').removeClass('d-none');
+        $('#lpa_data_2').addClass('d-none');
+        $('#lk_data_2').addClass('d-none');
+        break;
+    }
+  }
+
+  function change_type_2(type) {
+    switch (type) {
+      case '0':
+        $('#lpa_data_2').addClass('d-none');
+        $('#lk_data_2').addClass('d-none');
+        break;
+      case '1':
+        $('#lk_data_2').addClass('d-none');
+        $('#lpa_data_2').removeClass('d-none');
+        $('#lpa_data').addClass('d-none');
+        $('#lk_data').addClass('d-none');
+        break;
+      case '2':
+        $('#lpa_data_2').addClass('d-none');
+        $('#lk_data_2').removeClass('d-none');
+        $('#lpa_data').addClass('d-none');
+        $('#lk_data').addClass('d-none');
+        break;
+    }
+  }
+
+  function select_aurat() {
+    $('.select-gambar').removeClass('none');
+  }
+  $('.select-gambar [name="menutup_aurat"]').on('change', function() {
+    var value = $('.select-gambar [name="menutup_aurat"]:checked').val()
+    $('.select-aurat').text(value)
+  })
+
+  function pilih() {
+    $('.select-gambar').addClass('none');
+  }
+</script>

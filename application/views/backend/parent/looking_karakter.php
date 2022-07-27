@@ -25,6 +25,12 @@
                             $section = $this->db->get_where('enroll', array('student_id' => $student_id))->row()->section_id;
                             ?>
                             <div class="tab-pane active" id="lpa_data">
+                                <div class="row">
+                                    <div class="col-sm-3" style="border: 1px solid #eee; max-width:20% !important">
+                                        <h5 class="form-header">Statistik Nilai</h5>
+                                        <canvas id="myChart" width="400" height="400"></canvas>
+                                    </div>
+                                </div>
                                 <?php if ($section == 1 OR $section == 2 OR $section == 3) { ?>
                                     <div class="element-box-tp">
                                         <div class="table-responsive">
@@ -64,15 +70,6 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $this->db->select('build_id,student_id,user_id,class_id,section_id,date,avg(nullif(adb_1a,0)) as adb_1a,avg(nullif(adb_1b,0)) as adb_1b,avg(nullif(adb_1c,0)) as adb_1c,avg(nullif(adb_1d,0)) as adb_1d,avg(nullif(adb_2a,0)) as adb_2a,avg(nullif(adb_2b,0)) as adb_2b,avg(nullif(adb_2c,0)) as adb_2c,avg(nullif(adb_2d,0)) as adb_2d,avg(nullif(adb_2e,0)) as adb_2e,avg(nullif(adb_3a,0)) as adb_3a,avg(nullif(adb_3b,0)) as adb_3b,avg(nullif(adb_4a,0)) as adb_4a,avg(nullif(adb_4b,0)) as adb_4b,avg(nullif(adb_5a,0)) as adb_5a,avg(nullif(adb_5b,0)) as adb_5b,avg(nullif(adb_6a,0)) as adb_6a,avg(nullif(adb_6b,0)) as adb_6b,avg(nullif(adb_6c,0)) as adb_6c,avg(nullif(adb_6d,0)) as adb_6d,avg(nullif(adb_7a,0)) as adb_7a,avg(nullif(adb_7b,0)) as adb_7b,avg(nullif(adb_7c,0)) as adb_7c,avg(nullif(adb_7d,0)) as adb_7d,avg(nullif(adb_7e,0)) as adb_7e,avg(nullif(adb_8a,0)) as adb_8a,avg(nullif(adb_8b,0)) as adb_8b,avg(nullif(adb_9a,0)) as adb_9a,avg(nullif(adb_9b,0)) as adb_9b')->where(['student_id' => $student_id])->group_by('date');
-                                                    $date = date('Y-m-d');
-                                                    if ($week) {
-                                                        $date = date('Y-m-d', strtotime($week . ' week'));
-                                                    }
-                                                    list($start_date, $end_date) = x_week_range($date);
-                                                    $this->db->where('date >=', $start_date);
-                                                    $this->db->where('date <=', $end_date);
-                                                    $build = $this->db->get('build')->result_array();
                                                     foreach ($build as $r) :
                                                         ?>
                                                         <tr>
@@ -146,16 +143,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $this->db->select('build_id,student_id,user_id,class_id,section_id,date,avg(nullif(lpa_2_1,0)) as lpa_2_1,avg(nullif(lpa_2_24,0)) as lpa_2_24,avg(nullif(lpa_2_2,0)) as lpa_2_2, avg(nullif(lpa_2_3,0)) as lpa_2_3, avg(nullif(lpa_2_4,0)) as lpa_2_4, avg(nullif(lpa_2_5,0)) as lpa_2_5, avg(nullif(lpa_2_6,0)) as lpa_2_6, avg(nullif(lpa_2_7,0)) as lpa_2_7, avg(nullif(lpa_2_8,0)) as lpa_2_8, avg(nullif(lpa_2_9,0)) as lpa_2_9, avg(nullif(lpa_2_10,0)) as lpa_2_10, avg(nullif(lpa_2_11,0)) as lpa_2_11, avg(nullif(lpa_2_12,0)) as lpa_2_12, avg(nullif(lpa_2_13,0)) as lpa_2_13, avg(nullif(lpa_2_14,0)) as lpa_2_14, avg(nullif(lpa_2_15,0)) as lpa_2_15, avg(nullif(lpa_2_16,0)) as lpa_2_16, avg(nullif(lpa_2_17,0)) as lpa_2_17, avg(nullif(lpa_2_18,0)) as lpa_2_18, avg(nullif(lpa_2_19,0)) as lpa_2_19, avg(nullif(lpa_2_20,0)) as lpa_2_20, avg(nullif(lpa_2_21,0)) as lpa_2_21, avg(nullif(lpa_2_22,0)) as lpa_2_22, avg(nullif(lpa_2_23,0)) as lpa_2_23')->where(['student_id' => $student_id])->group_by('date');
-                                                    $date = date('Y-m-d');
-                                                    if ($week) {
-                                                        $date = date('Y-m-d', strtotime($week . ' week'));
-                                                    }
-                                                    list($start_date, $end_date) = x_week_range($date);
-                                                    $this->db->where('date >=', $start_date);
-                                                    $this->db->where('date <=', $end_date);
-                                                    $build = $this->db->get('build2')->result_array();
-                                                    foreach ($build as $r) :
+                                                    foreach ($build2 as $r) :
                                                         ?>
                                                         <tr>
                                                             <td><?= get_phrase(date('l', strtotime($r['date']))); ?></td>
@@ -219,6 +207,12 @@
                             ];
                             ?>
                             <div class="tab-pane" id="lk_data">
+                            <div class="row">
+                                    <div class="col-sm-3" style="border: 1px solid #eee;">
+                                        <h5 class="form-header">Statistik Nilai</h5>
+                                        <canvas id="myChart2" width="400" height="400"></canvas>
+                                    </div>
+                                </div>
                                 <?php if ($section == 1 OR $section == 2 OR $section == 3) { ?>
                                     <div class="element-box-tp">
                                         <div class="table-responsive">
@@ -237,10 +231,6 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $this->db->select('id,student_id,user_id,class_id,section_id,date,avg(nullif(sholat_shubuh,0)) as sholat_shubuh,avg(nullif(sholat_dzuhur,0)) as sholat_dzuhur,avg(nullif(shalat_ashar,0)) as shalat_ashar,avg(nullif(shalat_magrib,0)) as shalat_magrib,avg(nullif(shalat_isya,0)) as shalat_isya,avg(nullif(membaca_asmaul_husna,0)) as membaca_asmaul_husna,avg(nullif(mengenal_kosakata_arab,0)) as mengenal_kosakata_arab,avg(nullif(hafal_doa,0)) as hafal_doa,avg(nullif(mengikuti_kajian,0)) as mengikuti_kajian,avg(nullif(membaca_quran,0)) as membaca_quran')->where(['student_id' => $student_id])->group_by('date');
-                                                    $this->db->where('date >=', $start_date);
-                                                    $this->db->where('date <=', $end_date);
-                                                    $lk_data = $this->db->get('keagamaan')->result_array();
                                                     foreach ($lk_data as $item) {
                                                         ?>
                                                         <tr>
@@ -278,11 +268,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $this->db->select('id,student_id,user_id,class_id,section_id,date,avg(nullif(sholat_wajib,0)) as sholat_wajib,avg(nullif(sholat_rawatib,0)) as sholat_rawatib,avg(nullif(sholat_dhuha,0)) as sholat_dhuha,avg(nullif(sholat_tahajud,0)) as sholat_tahajud,avg(nullif(setor_dalil,0)) as setor_dalil,avg(nullif(menutup_aurat,0)) as menutup_aurat,avg(nullif(ilmu_fiqih,0)) as ilmu_fiqih,avg(nullif(membaca_alquran,0)) as membaca_alquran,avg(nullif(bahasa_arab,0)) as bahasa_arab,avg(nullif(shaum,0)) as shaum,avg(nullif(asmaulhusna,0)) as asmaulhusna')->where(['student_id' => $student_id])->group_by('date');
-                                                    $this->db->where('date >=', $start_date);
-                                                    $this->db->where('date <=', $end_date);
-                                                    $lk_data = $this->db->get('keagamaan2')->result_array();
-                                                    foreach ($lk_data as $item) {
+                                                    foreach ($lk_data2 as $item) {
                                                         ?>
                                                         <tr>
                                                             <td><?= get_phrase(date('l', strtotime($item['date']))); ?></td>
@@ -310,3 +296,155 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+<script>
+    var ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+            datasets: [{
+                label: 'Nilai',
+                data: [
+                    <?php
+                    if ($section == 15 or $section == 5 or $section == 7) {
+                        foreach ($build2 as $key => $row) {
+                            $lpa = $this->db->get_where('build2', array('date' => $row['date'], 'student_id' => $row['student_id']))->result_array();
+                            foreach ($lpa as $key => $value) {
+                                $jumlah_nilai1 = 0;
+                                foreach ($value as $kode => $nilai) {
+                                    if (strpos($kode, 'lpa_') === 0) {
+                                        $jumlah_nilai1 += $nilai;
+                                        $jumlah_jenis++;
+                                    }
+                                }
+                            }
+                            echo $jumlah_nilai1 . ',';
+                        }
+                    } else {
+                        foreach ($build as $key => $row) {
+                            $lpa = $this->db->get_where('build', array('date' => $row['date'], 'student_id' => $row['student_id']))->result_array();
+                            foreach ($lpa as $key => $value) {
+                                $jumlah_nilai1 = 0;
+                                foreach ($value as $kode => $nilai) {
+                                    if (strpos($kode, 'adb_') === 0) {
+                                        $jumlah_nilai1 += $nilai;
+                                        $jumlah_jenis++;
+                                    }
+                                }
+                            }
+                            echo $jumlah_nilai1 . ',';
+                        }
+                    }
+                    ?>
+                ],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+</script>
+<script>
+    var ctx = document.getElementById('myChart2');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+            datasets: [{
+                label: 'Nilai',
+                data: [
+                    <?php
+                    if ($section == 15 or $section == 5 or $section == 7) {
+                        foreach ($lk_data2 as $key => $value) {
+                            $lk2 = $this->db->get_where('keagamaan2', array('date' => $value['date'], 'student_id' => $value['student_id']))->result_array();
+                            foreach ($lk2 as $key => $row) {
+                                $nilai2 =
+                                    $row['sholat_wajib'] +
+                                    $row['sholat_rawatib'] +
+                                    $row['sholat_dhuha'] +
+                                    $row['sholat_tahajud'] +
+                                    $row['setor_dalil'] +
+                                    $row['menutup_aurat'] +
+                                    $row['ilmu_fiqih'] +
+                                    $row['membaca_alquran'] +
+                                    $row['bahasa_arab'] +
+                                    $row['shaum'] +
+                                    $row['asmaulhusna'];
+                            }
+                            echo $nilai2 . ',';
+                        }
+                    } else {
+                        foreach ($lk_data as $key => $value) {
+                            $lk = $this->db->get_where('keagamaan', array('date' => $value['date'], 'student_id' => $value['student_id']))->result_array();
+                            foreach ($lk as $key => $row) {
+                                $nilai1 =
+                                    $row['sholat_shubuh'] +
+                                    $row['sholat_dzuhur'] +
+                                    $row['shalat_ashar'] +
+                                    $row['shalat_magrib'] +
+                                    $row['shalat_isya'] +
+                                    $row['membaca_asmaul_husna'] +
+                                    $row['mengenal_kosakata_arab'] +
+                                    $row['hafal_doa'] +
+                                    $row['mengikuti_kajian'] +
+                                    $row['membaca_quran'];
+                            }
+                            echo $nilai1 . ',';
+                        }
+                    }
+                    ?>
+                ],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+</script>

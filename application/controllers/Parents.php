@@ -877,6 +877,12 @@ class Parents extends CI_Controller
             $this->session->set_userdata('last_page', current_url());
             redirect(base_url(), 'refresh');
         }
+        $data['result'] = $this->crud_model->lk_lpa1($week);
+        $data['result2'] = $this->crud_model->lk_lpa2($week);
+        $data['sqlLK1'] = $this->crud_model->sql_lk1($week);
+        $data['sqlLK2'] = $this->crud_model->sql_lk2($week);
+        $data['sqlLPA1'] = $this->crud_model->sql_lpa1($week);
+        $data['sql:PA2'] = $this->crud_model->sql_lpa2($week);
         $data['week']  = $week;
         $data['page_name']  = 'karakter_building';
         $data['page_title'] = get_phrase('character building');
@@ -892,124 +898,18 @@ class Parents extends CI_Controller
         if ($param1 == 'send') {
             $data['student_id'] = $this->input->post('student_id');
             $user_id = $this->session->userdata('login_user_id');
-            $enroll = $this->db->where('student_id', $data['student_id'])->get('enroll')->row();
             $data['user_id']    = "parent-" . $user_id;
-            $data['class_id']   = $enroll->class_id;
-            $data['section_id'] = $enroll->section_id;
+            $data['class_id']   = $this->input->post('class_id');
+            $data['section_id'] = $this->input->post('section_id');
             $data['date'] = date('Y-m-d');
-            if ($data['section_id'] == 1 or $data['section_id'] == 2 or $data['section_id'] == 3) { //level 1
-                // LPA
-                $data_lpa = $data;
-                $data_lpa['adb_1a']      = (int) $this->input->post('adb_1a');
-                $data_lpa['adb_1b']      = (int) $this->input->post('adb_1b');
-                $data_lpa['adb_1c']      = (int) $this->input->post('adb_1c');
-                $data_lpa['adb_1d']      = (int) $this->input->post('adb_1d');
-                $data_lpa['adb_2a']      = (int) $this->input->post('adb_2a');
-                $data_lpa['adb_2b']      = (int) $this->input->post('adb_2b');
-                $data_lpa['adb_2c']      = (int) $this->input->post('adb_2c');
-                $data_lpa['adb_2d']      = (int) $this->input->post('adb_2d');
-                $data_lpa['adb_2e']      = (int) $this->input->post('adb_2e');
-                $data_lpa['adb_3a']      = (int) $this->input->post('adb_3a');
-                $data_lpa['adb_3b']      = (int) $this->input->post('adb_3b');
-                $data_lpa['adb_4a']      = (int) $this->input->post('adb_4a');
-                $data_lpa['adb_3b']      = (int) $this->input->post('adb_3b');
-                $data_lpa['adb_4a']      = (int) $this->input->post('adb_4a');
-                $data_lpa['adb_4b']      = (int) $this->input->post('adb_4b');
-                $data_lpa['adb_5a']      = (int) $this->input->post('adb_5a');
-                $data_lpa['adb_5b']      = (int) $this->input->post('adb_5b');
-                $data_lpa['adb_6a']      = (int) $this->input->post('adb_6a');
-                $data_lpa['adb_6b']      = (int) $this->input->post('adb_6b');
-                $data_lpa['adb_6c']      = (int) $this->input->post('adb_6c');
-                $data_lpa['adb_6d']      = (int) $this->input->post('adb_6d');
-                $data_lpa['adb_7a']      = (int) $this->input->post('adb_7a');
-                $data_lpa['adb_7b']      = (int) $this->input->post('adb_7b');
-                $data_lpa['adb_7c']      = (int) $this->input->post('adb_7c');
-                $data_lpa['adb_7d']      = (int) $this->input->post('adb_7d');
-                $data_lpa['adb_7e']      = (int) $this->input->post('adb_7e');
-                $data_lpa['adb_8a']      = (int) $this->input->post('adb_8a');
-                $data_lpa['adb_8b']      = (int) $this->input->post('adb_8b');
-                $data_lpa['adb_9a']      = (int) $this->input->post('adb_9a');
-                $data_lpa['adb_9b']      = (int) $this->input->post('adb_9b');
-                // LK
-                $data_lk = $data;
-                $data_lk['sholat_shubuh'] = (int) $this->input->post('sholat_shubuh');
-                $data_lk['sholat_dzuhur'] = (int) $this->input->post('sholat_dzuhur');
-                $data_lk['shalat_ashar'] = (int) $this->input->post('shalat_ashar');
-                $data_lk['shalat_magrib'] = (int) $this->input->post('shalat_magrib');
-                $data_lk['shalat_isya'] = (int) $this->input->post('shalat_isya');
-                $data_lk['membaca_asmaul_husna'] = (int) $this->input->post('membaca_asmaul_husna');
-                $data_lk['mengenal_kosakata_arab'] = (int) $this->input->post('mengenal_kosakata_arab');
-                $data_lk['hafal_doa'] = (int) $this->input->post('hafal_doa');
-                $data_lk['mengikuti_kajian'] = (int) $this->input->post('mengikuti_kajian');
-                $data_lk['membaca_quran'] = (int) $this->input->post('membaca_quran');
-                // Insert
-                $where = ['date' => $data['date'], 'user_id' => $data['user_id'], 'student_id' => $data['student_id']];
-                $build = $this->db->where($where)->get('build')->num_rows();
-                $lk = $this->db->where($where)->get('keagamaan')->num_rows();
-                if ($build) {
-                    $this->db->where($where)->update('build', $data_lpa);
-                } else {
-                    $this->db->insert('build', $data_lpa);
-                }
-                if ($lk) {
-                    $this->db->where($where)->update('keagamaan', $data_lk);
-                } else {
-                    $this->db->insert('keagamaan', $data_lk);
-                }
-            } else { //level 2
-                // LPA
-                $data_lpa = $data;
-                $data_lpa['lpa_2_1']      = (int) $this->input->post('lpa_2-1');
-                $data_lpa['lpa_2_2']      = (int) $this->input->post('lpa_2-2');
-                $data_lpa['lpa_2_3']      = (int) $this->input->post('lpa_2-3');
-                $data_lpa['lpa_2_4']      = (int) $this->input->post('lpa_2-4');
-                $data_lpa['lpa_2_5']      = (int) $this->input->post('lpa_2-5');
-                $data_lpa['lpa_2_6']      = (int) $this->input->post('lpa_2-6');
-                $data_lpa['lpa_2_7']      = (int) $this->input->post('lpa_2-7');
-                $data_lpa['lpa_2_8']      = (int) $this->input->post('lpa_2-8');
-                $data_lpa['lpa_2_9']      = (int) $this->input->post('lpa_2-9');
-                $data_lpa['lpa_2_10']      = (int) $this->input->post('lpa_2-10');
-                $data_lpa['lpa_2_11']      = (int) $this->input->post('lpa_2-11');
-                $data_lpa['lpa_2_12']      = (int) $this->input->post('lpa_2-12');
-                $data_lpa['lpa_2_13']      = (int) $this->input->post('lpa_2-13');
-                $data_lpa['lpa_2_14']      = (int) $this->input->post('lpa_2-14');
-                $data_lpa['lpa_2_15']      = (int) $this->input->post('lpa_2-15');
-                $data_lpa['lpa_2_16']      = (int) $this->input->post('lpa_2-16');
-                $data_lpa['lpa_2_17']      = (int) $this->input->post('lpa_2-17');
-                $data_lpa['lpa_2_18']      = (int) $this->input->post('lpa_2-18');
-                $data_lpa['lpa_2_19']      = (int) $this->input->post('lpa_2-19');
-                $data_lpa['lpa_2_20']      = (int) $this->input->post('lpa_2-20');
-                $data_lpa['lpa_2_21']      = (int) $this->input->post('lpa_2-21');
-                $data_lpa['lpa_2_22']      = (int) $this->input->post('lpa_2-22');
-                $data_lpa['lpa_2_23']      = (int) $this->input->post('lpa_2-23');
-                // LK
-                $data_lk = $data;
-                $data_lk['sholat_wajib'] = (int) $this->input->post('sholat_wajib');
-                $data_lk['sholat_rawatib'] = (int) $this->input->post('sholat_rawatib');
-                $data_lk['sholat_dhuha'] = (int) $this->input->post('sholat_dhuha');
-                $data_lk['sholat_tahajud'] = (int) $this->input->post('sholat_tahajud');
-                $data_lk['setor_dalil'] = (int) $this->input->post('setor_dalil');
-                $data_lk['menutup_aurat'] = (int) $this->input->post('menutup_aurat');
-                $data_lk['ilmu_fiqih'] = (int) $this->input->post('ilmu_fiqih');
-                $data_lk['membaca_alquran'] = (int) $this->input->post('membaca_alquran');
-                $data_lk['bahasa_arab'] = (int) $this->input->post('bahasa_arab');
-                $data_lk['shaum'] = (int) $this->input->post('shaum');
-                $data_lk['asmaulhusna'] = (int) $this->input->post('asmaulhusna');
-                // Insert
-                $where = ['date' => $data['date'], 'user_id' => $data['user_id'], 'student_id' => $data['student_id']];
-                $build = $this->db->where($where)->get('build2')->num_rows();
-                $lk = $this->db->where($where)->get('keagamaan2')->num_rows();
-                if ($build) {
-                    $this->db->where($where)->update('build2', $data_lpa);
-                } else {
-                    $this->db->insert('build2', $data_lpa);
-                }
-                if ($lk) {
-                    $this->db->where($where)->update('keagamaan2', $data_lk);
-                } else {
-                    $this->db->insert('keagamaan2', $data_lk);
-                }
+            if ($data['section_id'] == 1 or $data['section_id'] == 2 or $data['section_id'] == 3) { 
+                //level 1
+                $this->crud_model->create_nilai($data);
+            } else { 
+                // level2
+                $this->crud_model->create_nilai2($data);
             }
+
             $this->session->set_flashdata('flash_message', get_phrase('successfully_added'));
             redirect(base_url() . 'parents/karakter_building/', 'refresh');
         }
@@ -1027,6 +927,10 @@ class Parents extends CI_Controller
             $this->db->where('id', $_GET['id']);
             $this->db->update('notification', $notify);
         }
+        $page_data['build'] = $this->crud_model->looking_build($student_id, $week);
+        $page_data['build2'] = $this->crud_model->looking_build2($student_id, $week);
+        $page_data['lk_data'] = $this->crud_model->looking_lk($student_id, $week);
+        $page_data['lk_data2'] = $this->crud_model->looking_lk2($student_id, $week);
         $page_data['week'] = $week;
         $page_data['student_id'] = $student_id;
         $page_data['page_name'] = 'looking_karakter';
@@ -1267,6 +1171,19 @@ class Parents extends CI_Controller
         $page_data['page_name']  = 'baca_blog';
         $page_data['page_title'] = 'Baca Blog';
         $page_data['id']   = $id;
+        $this->load->view('backend/index', $page_data);
+    }
+    function edit_karakter($param = '')
+    {
+        $decode = base64_decode($param);
+        $ex = explode('-',  $decode);
+
+        $page_data['class_id'] = $ex[0];
+        $page_data['section_id'] = $ex[1];
+        $page_data['student_id'] = $ex[2];
+        $page_data['user_id'] = $ex[3];
+        $page_data['page_name']  = 'edit_karakter';
+        $page_data['page_title'] = 'Ubah Nilai Karakter';
         $this->load->view('backend/index', $page_data);
     }
 }

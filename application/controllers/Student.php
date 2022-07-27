@@ -1393,9 +1393,15 @@ class Student extends CI_Controller
             $this->session->set_userdata('last_page', current_url());
             redirect(base_url(), 'refresh');
         }
+        $data['result'] = $this->crud_model->lk_lpa1($week);
+        $data['result2'] = $this->crud_model->lk_lpa2($week);
+        $data['sqlLK1'] = $this->crud_model->sql_lk1($week);
+        $data['sqlLK2'] = $this->crud_model->sql_lk2($week);
+        $data['sqlLPA1'] = $this->crud_model->sql_lpa1($week);
+        $data['sql:PA2'] = $this->crud_model->sql_lpa2($week);
         $data['week']  = $week;
         $data['page_name']  = 'karakter_building';
-        $data['page_title'] = get_phrase('karakter building');
+        $data['page_title'] = get_phrase('character building');
         $this->load->view('backend/index', $data);
     }
 
@@ -1405,6 +1411,10 @@ class Student extends CI_Controller
             $this->session->set_userdata('last_page', current_url());
             redirect(base_url(), 'refresh');
         }
+        $page_data['build'] = $this->crud_model->looking_build($student_id, $week);
+        $page_data['build2'] = $this->crud_model->looking_build2($student_id, $week);
+        $page_data['lk_data'] = $this->crud_model->looking_lk($student_id, $week);
+        $page_data['lk_data2'] = $this->crud_model->looking_lk2($student_id, $week);
         $page_data['week'] = $week;
         $page_data['student_id'] = $student_id;
         $page_data['page_name'] = 'looking_karakter';
