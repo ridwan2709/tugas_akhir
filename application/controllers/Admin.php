@@ -8,7 +8,7 @@ class Admin extends CI_Controller
         $this->load->model('mail_model');
         $this->load->model('academic_model');
         $this->load->model('Crud_model');
-        $this->load->library('session');
+        $this->load->library('session','unit_test');
         $this->load->helper('idn_helper');
         $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         $this->output->set_header('Pragma: no-cache');
@@ -3271,61 +3271,7 @@ class Admin extends CI_Controller
         $page_data['tgl_awal']   = $this->input->post('tgl_awal').'-1';
         $page_data['tgl_akhir']   = $this->input->post('tgl_akhir').'-1';
         $page_data['data_report'] = $this->Crud_model->get_report($page_data['class_id'], $page_data['section_id'], $page_data['student_id'], $page_data['tgl_awal'], $page_data['tgl_akhir']);
-
-        foreach ($page_data['data_report'] as $key => $data) {
-            $data_perbulan = $this->db->get_where('build', array('student_id' => $page_data['student_id'], 'section_id' => $page_data['section_id'], 'class_id' => $page_data['class_id'], 'date' => $data['date']))->result_array();
-            foreach ($data_perbulan as $key => $perbulan) {
-                $jumlah_nilai = 0 ;
-                foreach ($perbulan as $key => $item) {
-                        if (strpos($key, 'adb_') === 0) {
-                            $jumlah_nilai += $item;
-                        }
-                        $jumlah_nilai++;
-                    }
-                    
-                    echo '<pre>';
-                    var_dump($this->crud_model->tgl_indo($perbulan['date']));
-                    var_dump($jumlah_nilai);
-                    echo '</pre>';
-            }
-
-        }
-       die;
-        foreach ($page_data['data_report'] as $key => $value) {
-            $data1  = (int) $value['adb_1a'];
-            $data2  = (int) $value['adb_1b'];
-            $data3  = (int) $value['adb_1c'];
-            $data4  = (int) $value['adb_1d'];
-            $data5  = (int) $value['adb_2a'];
-            $data6  = (int) $value['adb_2b'];
-            $data7  = (int) $value['adb_2c'];
-            $data8  = (int) $value['adb_2d'];
-            $data9  = (int) $value['adb_2e'];
-            $data10 = (int) $value['adb_3a'];
-            $data11 = (int) $value['adb_3b'];
-            $data12 = (int) $value['adb_4a'];
-            $data13 = (int) $value['adb_3b'];
-            $data14 = (int) $value['adb_4a'];
-            $data15 = (int) $value['adb_4b'];
-            $data16 = (int) $value['adb_5a'];
-            $data17 = (int) $value['adb_5b'];
-            $data18 = (int) $value['adb_6a'];
-            $data19 = (int) $value['adb_6b'];
-            $data20 = (int) $value['adb_6c'];
-            $data21 = (int) $value['adb_6d'];
-            $data22 = (int) $value['adb_7a'];
-            $data23 = (int) $value['adb_7b'];
-            $data24 = (int) $value['adb_7c'];
-            $data25 = (int) $value['adb_7d'];
-            $data26 = (int) $value['adb_7e'];
-            $data27 = (int) $value['adb_8a'];
-            $data28 = (int) $value['adb_8b'];
-            $data29 = (int) $value['adb_9a'];
-            $data30 = (int) $value['adb_9b'];
-        }
-        // data di jumlahkan
-        $page_data['jumlah_lpa'] = $data1 + $data2 + $data3 + $data4 + $data5 + $data6 + $data7 + $data8 + $data9 + $data10 + $data11 + $data12 + $data13 + $data14 + $data15 + $data16 + $data17 + $data18 + $data19 + $data20 + $data21 + $data22 + $data23 + $data24 + $data25 + $data26 + $data27 + $data28 + $data29 + $data30;
-        $page_data['rata_lpa'] = $page_data['jumlah_lpa'] / 30;
+        // var_dump($page_data['student_id']);die;
         $page_data['page_name']   = 'marks_report';
         $page_data['page_title']  = get_phrase('marks_report');
         $this->load->view('backend/index', $page_data);

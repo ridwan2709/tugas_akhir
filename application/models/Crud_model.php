@@ -1193,10 +1193,13 @@ class Crud_model extends CI_Model
         return $query->result_array();
     }
 
-    function get_report($class_id = '', $section_id = '', $student_id = '', $tgl_awal = '' , $tgl_akhir = '')
+    function get_report($class_id = '', $section_id = '', $student_id = '', $tgl_awal = '', $tgl_akhir = '')
     {
-        $query = $this->db->get_where('build', array('student_id' => $student_id, 'class_id' => $class_id, 'section_id' => $section_id, 'date>=' => $tgl_awal, 'date<=' => $tgl_akhir));
-        return $query->result_array();
+        if ($section_id == 15 or $section_id == 5 or $section_id == 7) {
+            return $this->db->query("SELECT * FROM ( SELECT DATE, YEAR(DATE) AS tahun, MONTH(DATE) AS bulan, student_id, SUM(IFNULL(lpa_2_1, 0))  +  SUM(IFNULL(lpa_2_24, 0)) +  SUM(IFNULL(lpa_2_2, 0))  +  SUM(IFNULL(lpa_2_4, 0))  +  SUM(IFNULL(lpa_2_5, 0))  +  SUM(IFNULL(lpa_2_6, 0))  +  SUM(IFNULL(lpa_2_7, 0))  +  SUM(IFNULL(lpa_2_8, 0))  +  SUM(IFNULL(lpa_2_9, 0))  +  SUM(IFNULL(lpa_2_10, 0)) +  SUM(IFNULL(lpa_2_11, 0)) +  SUM(IFNULL(lpa_2_12, 0)) +  SUM(IFNULL(lpa_2_13, 0)) +  SUM(IFNULL(lpa_2_14, 0)) +  SUM(IFNULL(lpa_2_15, 0)) +  SUM(IFNULL(lpa_2_16, 0)) +  SUM(IFNULL(lpa_2_17, 0)) +  SUM(IFNULL(lpa_2_18, 0)) +  SUM(IFNULL(lpa_2_19, 0)) +  SUM(IFNULL(lpa_2_20, 0)) +  SUM(IFNULL(lpa_2_21, 0)) +  SUM(IFNULL(lpa_2_22, 0)) +  SUM(IFNULL(lpa_2_23, 0))  as jumlah_lpa FROM `build2` WHERE student_id = $student_id AND class_id = $class_id AND section_id = $section_id AND `date` >= '$tgl_awal' AND `date` <= '$tgl_akhir' GROUP BY YEAR(DATE), MONTH(DATE), student_id) AS lpa JOIN(SELECT DATE, YEAR(DATE) AS tahun, MONTH(DATE) AS bulan, student_id, SUM(IFNULL(sholat_wajib, 0)) +  SUM(IFNULL(sholat_rawatib, 0)) +  SUM(IFNULL(sholat_dhuha, 0)) +  SUM(IFNULL (sholat_tahajud, 0)) +  SUM(IFNULL(setor_dalil, 0)) +  SUM(IFNULL(menutup_aurat, 0)) +  SUM(IFNULL(ilmu_fiqih, 0)) +  SUM(IFNULL(membaca_alquran, 0)) +  SUM(IFNULL(bahasa_arab, 0)) +  SUM(IFNULL(shaum, 0)) +  SUM(IFNULL(asmaulhusna,0)) as  jumlah_lk FROM `keagamaan2` WHERE student_id = $student_id AND class_id = $class_id AND section_id = $section_id AND `date` >= '$tgl_awal' AND  `date` <= '$tgl_akhir' GROUP BY YEAR(DATE), MONTH(DATE), student_id) AS lk ON lk.student_id = lpa.student_id AND lk.tahun = lpa.tahun AND lk.bulan = lpa.bulan;")->result_array();
+        } else if ($section_id == 1 or $section_id == 2 or $section_id == 3)  {
+            return $this->db->query("SELECT * FROM ( SELECT DATE, YEAR(DATE) AS tahun, MONTH(DATE) AS bulan, student_id, SUM(IFNULL(adb_1a, 0)) + SUM(IFNULL(adb_1b, 0)) + SUM(IFNULL(adb_1c, 0)) + SUM(IFNULL(adb_1d, 0)) + SUM(IFNULL(adb_2a, 0)) + SUM(IFNULL(adb_2b, 0)) + SUM(IFNULL(adb_2c, 0)) + SUM(IFNULL(adb_2d, 0)) + SUM(IFNULL(adb_2e, 0)) + SUM(IFNULL(adb_3a, 0)) + SUM(IFNULL(adb_3b, 0)) + SUM(IFNULL(adb_4a, 0)) + SUM(IFNULL(adb_4b, 0)) + SUM(IFNULL(adb_5a, 0)) + SUM(IFNULL(adb_5b, 0)) + SUM(IFNULL(adb_6a, 0)) + SUM(IFNULL(adb_6b, 0)) + SUM(IFNULL(adb_6c, 0)) + SUM(IFNULL(adb_6d, 0)) + SUM(IFNULL(adb_7a, 0)) + SUM(IFNULL(adb_7b, 0)) + SUM(IFNULL(adb_7c, 0)) + SUM(IFNULL(adb_7d, 0)) + SUM(IFNULL(adb_7e, 0)) + SUM(IFNULL(adb_8a, 0)) + SUM(IFNULL(adb_8b, 0)) + SUM(IFNULL(adb_9a, 0)) + SUM(IFNULL(adb_9b, 0)) as jumlah_lpa FROM `build` WHERE student_id = $student_id AND class_id = $class_id AND section_id = section_id AND `date` >= '$tgl_awal' AND `date` <= '$tgl_akhir' GROUP BY YEAR(DATE), MONTH(DATE), student_id) AS lpa JOIN( SELECT DATE, YEAR(DATE) AS tahun, MONTH(DATE) AS bulan, student_id, SUM(sholat_shubuh) + SUM(sholat_dzuhur) + SUM(shalat_ashar) + SUM(shalat_magrib) + SUM(shalat_isya) + SUM(membaca_asmaul_husna) + SUM(mengenal_kosakata_arab) + SUM(hafal_doa) + SUM(mengikuti_kajian) + SUM(membaca_quran) as jumlah_lk FROM `keagamaan` WHERE student_id =  student_id AND class_id = $class_id AND section_id = $section_id AND `date` >= '$tgl_awal' AND `date` <= '$tgl_akhir' GROUP BY YEAR(DATE), MONTH(DATE), student_id ) AS lk ON lk.student_id = lpa.student_id AND lk.tahun = lpa.tahun AND lk.bulan = lpa.bulan;")->result_array();;
+        }
     }
 
     function get_exam_info($exam_id)
@@ -1841,7 +1844,7 @@ class Crud_model extends CI_Model
 
     // LK LPA Level 1
     function lk_lpa1($week = '')
-    { 
+    {
         $date = date('Y-m-d');
         if ($week) {
             $date = date('Y-m-d', strtotime($week . ' week'));
@@ -1862,8 +1865,8 @@ class Crud_model extends CI_Model
             $date = date('Y-m-d', strtotime($week . ' week'));
         }
         list($start_date, $end_date) = x_week_range($date);
-         $result = $this->db->query("SELECT count(DISTINCT date) as date_count, `build_id`, `build2`.`student_id`, `build2`.`user_id`, `build2`.`class_id`, `build2`.`section_id`, AVG(NULLIF(lpa_2_1, 0)) AS lpa_2_1, AVG(NULLIF(lpa_2_24, 0)) AS lpa_2_24, AVG(NULLIF(lpa_2_2, 0)) AS lpa_2_2, AVG(NULLIF(lpa_2_4, 0)) AS lpa_2_4, AVG(NULLIF(lpa_2_5, 0)) AS lpa_2_5, AVG(NULLIF(lpa_2_6, 0)) AS lpa_2_6, AVG(NULLIF(lpa_2_7, 0)) AS lpa_2_7, AVG(NULLIF(lpa_2_8, 0)) AS lpa_2_8, AVG(NULLIF(lpa_2_9, 0)) AS lpa_2_9, AVG(NULLIF(lpa_2_10, 0)) AS lpa_2_10, AVG(NULLIF(lpa_2_11, 0)) AS lpa_2_11, AVG(NULLIF(lpa_2_12, 0)) AS lpa_2_12, AVG(NULLIF(lpa_2_13, 0)) AS lpa_2_13, AVG(NULLIF(lpa_2_14, 0)) AS lpa_2_14, AVG(NULLIF(lpa_2_15, 0)) AS lpa_2_15, AVG(NULLIF(lpa_2_16, 0)) AS lpa_2_16, AVG(NULLIF(lpa_2_17, 0)) AS lpa_2_17, AVG(NULLIF(lpa_2_18, 0)) AS lpa_2_18, AVG(NULLIF(lpa_2_19, 0)) AS lpa_2_19, AVG(NULLIF(lpa_2_20, 0)) AS lpa_2_20, AVG(NULLIF(lpa_2_21, 0)) AS lpa_2_21, AVG(NULLIF(lpa_2_22, 0)) AS lpa_2_22, AVG(NULLIF(lpa_2_23, 0)) AS lpa_2_23, lk_sholat_wajib, lk_sholat_rawatib, lk_sholat_dhuha, lk_sholat_tahajud, lk_setor_dalil, lk_menutup_aurat, lk_ilmu_fiqih, lk_membaca_alquran, lk_bahasa_arab, lk_shaum,lk_asmaulhusna FROM `build2` LEFT JOIN( SELECT student_id, SUM(sholat_wajib) AS lk_sholat_wajib, SUM(sholat_rawatib) AS lk_sholat_rawatib, SUM(sholat_dhuha) AS lk_sholat_dhuha, SUM(sholat_tahajud) AS lk_sholat_tahajud, SUM(setor_dalil) AS lk_setor_dalil, SUM(menutup_aurat) AS lk_menutup_aurat, SUM(ilmu_fiqih) AS lk_ilmu_fiqih, SUM(membaca_alquran) AS lk_membaca_alquran, SUM(bahasa_arab) AS lk_bahasa_arab, SUM(shaum) AS lk_shaum, SUM(asmaulhusna) AS lk_asmaulhusna FROM (SELECT student_id, AVG(NULLIF(sholat_wajib, 0)) AS sholat_wajib, AVG(NULLIF(sholat_rawatib, 0)) AS sholat_rawatib, AVG(NULLIF(sholat_dhuha, 0)) AS sholat_dhuha, AVG(NULLIF(sholat_tahajud, 0)) AS sholat_tahajud, AVG(NULLIF(setor_dalil, 0)) AS setor_dalil, AVG(NULLIF(menutup_aurat, 0)) AS menutup_aurat, AVG(NULLIF(ilmu_fiqih, 0)) AS ilmu_fiqih, AVG(NULLIF(membaca_alquran, 0)) AS membaca_alquran, AVG(NULLIF(bahasa_arab, 0)) AS bahasa_arab, AVG(NULLIF(shaum, 0)) AS shaum, AVG(NULLIF(asmaulhusna,0)) AS asmaulhusna FROM `keagamaan2` WHERE `date` >= '$start_date' AND `date` <= '$end_date' GROUP BY `student_id`, `date`) as k group by student_id) AS lk ON lk.student_id = build2.student_id WHERE `build2`.`date` >= '$start_date' AND `build2`.`date` <= '$end_date' GROUP BY `build2`.`student_id`")->result_array();
-         return $result;
+        $result = $this->db->query("SELECT count(DISTINCT date) as date_count, `build_id`, `build2`.`student_id`, `build2`.`user_id`, `build2`.`class_id`, `build2`.`section_id`, AVG(NULLIF(lpa_2_1, 0)) AS lpa_2_1, AVG(NULLIF(lpa_2_24, 0)) AS lpa_2_24, AVG(NULLIF(lpa_2_2, 0)) AS lpa_2_2, AVG(NULLIF(lpa_2_4, 0)) AS lpa_2_4, AVG(NULLIF(lpa_2_5, 0)) AS lpa_2_5, AVG(NULLIF(lpa_2_6, 0)) AS lpa_2_6, AVG(NULLIF(lpa_2_7, 0)) AS lpa_2_7, AVG(NULLIF(lpa_2_8, 0)) AS lpa_2_8, AVG(NULLIF(lpa_2_9, 0)) AS lpa_2_9, AVG(NULLIF(lpa_2_10, 0)) AS lpa_2_10, AVG(NULLIF(lpa_2_11, 0)) AS lpa_2_11, AVG(NULLIF(lpa_2_12, 0)) AS lpa_2_12, AVG(NULLIF(lpa_2_13, 0)) AS lpa_2_13, AVG(NULLIF(lpa_2_14, 0)) AS lpa_2_14, AVG(NULLIF(lpa_2_15, 0)) AS lpa_2_15, AVG(NULLIF(lpa_2_16, 0)) AS lpa_2_16, AVG(NULLIF(lpa_2_17, 0)) AS lpa_2_17, AVG(NULLIF(lpa_2_18, 0)) AS lpa_2_18, AVG(NULLIF(lpa_2_19, 0)) AS lpa_2_19, AVG(NULLIF(lpa_2_20, 0)) AS lpa_2_20, AVG(NULLIF(lpa_2_21, 0)) AS lpa_2_21, AVG(NULLIF(lpa_2_22, 0)) AS lpa_2_22, AVG(NULLIF(lpa_2_23, 0)) AS lpa_2_23, lk_sholat_wajib, lk_sholat_rawatib, lk_sholat_dhuha, lk_sholat_tahajud, lk_setor_dalil, lk_menutup_aurat, lk_ilmu_fiqih, lk_membaca_alquran, lk_bahasa_arab, lk_shaum,lk_asmaulhusna FROM `build2` LEFT JOIN( SELECT student_id, SUM(sholat_wajib) AS lk_sholat_wajib, SUM(sholat_rawatib) AS lk_sholat_rawatib, SUM(sholat_dhuha) AS lk_sholat_dhuha, SUM(sholat_tahajud) AS lk_sholat_tahajud, SUM(setor_dalil) AS lk_setor_dalil, SUM(menutup_aurat) AS lk_menutup_aurat, SUM(ilmu_fiqih) AS lk_ilmu_fiqih, SUM(membaca_alquran) AS lk_membaca_alquran, SUM(bahasa_arab) AS lk_bahasa_arab, SUM(shaum) AS lk_shaum, SUM(asmaulhusna) AS lk_asmaulhusna FROM (SELECT student_id,   FROM `keagamaan2` WHERE `date` >= '$start_date' AND `date` <= '$end_date' GROUP BY `student_id`, `date`) as k group by student_id) AS lk ON lk.student_id = build2.student_id WHERE `build2`.`date` >= '$start_date' AND `build2`.`date` <= '$end_date' GROUP BY `build2`.`student_id`")->result_array();
+        return $result;
     }
 
     // Penilai LK level 1
@@ -1874,7 +1877,7 @@ class Crud_model extends CI_Model
             $date = date('Y-m-d', strtotime($week . ' week'));
         }
         list($start_date, $end_date) = x_week_range($date);
-        
+
         $this->db->where('date >=', $start_date);
         $this->db->where('date <=', $end_date);
         $sqlLPA = $this->db->get('build')->result_array();
@@ -1890,7 +1893,7 @@ class Crud_model extends CI_Model
             $date = date('Y-m-d', strtotime($week . ' week'));
         }
         list($start_date, $end_date) = x_week_range($date);
-        
+
         $this->db->where('date >=', $start_date);
         $this->db->where('date <=', $end_date);
         $sqlLPA2 = $this->db->get('build2')->result_array();
@@ -1906,7 +1909,7 @@ class Crud_model extends CI_Model
             $date = date('Y-m-d', strtotime($week . ' week'));
         }
         list($start_date, $end_date) = x_week_range($date);
-        
+
         $this->db->where('date >=', $start_date);
         $this->db->where('date <=', $end_date);
         return $this->db->get('build2')->result_array();
@@ -1918,10 +1921,10 @@ class Crud_model extends CI_Model
             $date = date('Y-m-d', strtotime($week . ' week'));
         }
         list($start_date, $end_date) = x_week_range($date);
-        
+
         $this->db->where('date >=', $start_date);
         $this->db->where('date <=', $end_date);
-        return$this->db->get('build2')->result_array();
+        return $this->db->get('build2')->result_array();
     }
 
     function update_read_news($param1)
@@ -1957,7 +1960,7 @@ class Crud_model extends CI_Model
     }
     function looking_build($student_id, $week)
     {
-        
+
         $this->db->select('build_id,student_id,user_id,class_id,section_id,date,avg(nullif(adb_1a,0)) as adb_1a,avg(nullif(adb_1b,0)) as adb_1b,avg(nullif(adb_1c,0)) as adb_1c,avg(nullif(adb_1d,0)) as adb_1d,avg(nullif(adb_2a,0)) as adb_2a,avg(nullif(adb_2b,0)) as adb_2b,avg(nullif(adb_2c,0)) as adb_2c,avg(nullif(adb_2d,0)) as adb_2d,avg(nullif(adb_2e,0)) as adb_2e,avg(nullif(adb_3a,0)) as adb_3a,avg(nullif(adb_3b,0)) as adb_3b,avg(nullif(adb_4a,0)) as adb_4a,avg(nullif(adb_4b,0)) as adb_4b,avg(nullif(adb_5a,0)) as adb_5a,avg(nullif(adb_5b,0)) as adb_5b,avg(nullif(adb_6a,0)) as adb_6a,avg(nullif(adb_6b,0)) as adb_6b,avg(nullif(adb_6c,0)) as adb_6c,avg(nullif(adb_6d,0)) as adb_6d,avg(nullif(adb_7a,0)) as adb_7a,avg(nullif(adb_7b,0)) as adb_7b,avg(nullif(adb_7c,0)) as adb_7c,avg(nullif(adb_7d,0)) as adb_7d,avg(nullif(adb_7e,0)) as adb_7e,avg(nullif(adb_8a,0)) as adb_8a,avg(nullif(adb_8b,0)) as adb_8b,avg(nullif(adb_9a,0)) as adb_9a,avg(nullif(adb_9b,0)) as adb_9b')->where(['student_id' => $student_id])->group_by('date');
         $date = date('Y-m-d');
         if ($week) {
@@ -1968,7 +1971,7 @@ class Crud_model extends CI_Model
         $this->db->where('date <=', $end_date);
         return $this->db->get('build')->result_array();
     }
-    
+
     function looking_build2($student_id, $week)
     {
         $this->db->select('build_id,student_id,user_id,class_id,section_id,date,avg(nullif(lpa_2_1,0)) as lpa_2_1,avg(nullif(lpa_2_24,0)) as lpa_2_24,avg(nullif(lpa_2_2,0)) as lpa_2_2, avg(nullif(lpa_2_3,0)) as lpa_2_3, avg(nullif(lpa_2_4,0)) as lpa_2_4, avg(nullif(lpa_2_5,0)) as lpa_2_5, avg(nullif(lpa_2_6,0)) as lpa_2_6, avg(nullif(lpa_2_7,0)) as lpa_2_7, avg(nullif(lpa_2_8,0)) as lpa_2_8, avg(nullif(lpa_2_9,0)) as lpa_2_9, avg(nullif(lpa_2_10,0)) as lpa_2_10, avg(nullif(lpa_2_11,0)) as lpa_2_11, avg(nullif(lpa_2_12,0)) as lpa_2_12, avg(nullif(lpa_2_13,0)) as lpa_2_13, avg(nullif(lpa_2_14,0)) as lpa_2_14, avg(nullif(lpa_2_15,0)) as lpa_2_15, avg(nullif(lpa_2_16,0)) as lpa_2_16, avg(nullif(lpa_2_17,0)) as lpa_2_17, avg(nullif(lpa_2_18,0)) as lpa_2_18, avg(nullif(lpa_2_19,0)) as lpa_2_19, avg(nullif(lpa_2_20,0)) as lpa_2_20, avg(nullif(lpa_2_21,0)) as lpa_2_21, avg(nullif(lpa_2_22,0)) as lpa_2_22, avg(nullif(lpa_2_23,0)) as lpa_2_23')->where(['student_id' => $student_id])->group_by('date');
@@ -1989,12 +1992,12 @@ class Crud_model extends CI_Model
         if ($week) {
             $date = date('Y-m-d', strtotime($week . ' week'));
         }
-        list($start_date, $end_date) = x_week_range($date); 
+        list($start_date, $end_date) = x_week_range($date);
         $this->db->where('date >=', $start_date);
         $this->db->where('date <=', $end_date);
-       return $this->db->get('keagamaan')->result_array();
+        return $this->db->get('keagamaan')->result_array();
     }
-    
+
     function looking_lk2($student_id, $week)
     {
         $this->db->select('id,student_id,user_id,class_id,section_id,date,avg(nullif(sholat_wajib,0)) as sholat_wajib,avg(nullif(sholat_rawatib,0)) as sholat_rawatib,avg(nullif(sholat_dhuha,0)) as sholat_dhuha,avg(nullif(sholat_tahajud,0)) as sholat_tahajud,avg(nullif(setor_dalil,0)) as setor_dalil,avg(nullif(menutup_aurat,0)) as menutup_aurat,avg(nullif(ilmu_fiqih,0)) as ilmu_fiqih,avg(nullif(membaca_alquran,0)) as membaca_alquran,avg(nullif(bahasa_arab,0)) as bahasa_arab,avg(nullif(shaum,0)) as shaum,avg(nullif(asmaulhusna,0)) as asmaulhusna')->where(['student_id' => $student_id])->group_by('date');
@@ -2002,14 +2005,15 @@ class Crud_model extends CI_Model
         if ($week) {
             $date = date('Y-m-d', strtotime($week . ' week'));
         }
-        list($start_date, $end_date) = x_week_range($date); 
+        list($start_date, $end_date) = x_week_range($date);
         $this->db->where('date >=', $start_date);
         $this->db->where('date <=', $end_date);
-       return $this->db->get('keagamaan2')->result_array();
+        return $this->db->get('keagamaan2')->result_array();
     }
 
-    function tgl_indo($tanggal){
-        $bulan = array (
+    function tgl_indo($tanggal)
+    {
+        $bulan = array(
             1 =>   'Januari',
             'Februari',
             'Maret',
@@ -2024,12 +2028,36 @@ class Crud_model extends CI_Model
             'Desember'
         );
         $pecahkan = explode('-', $tanggal);
-        
+
         // variabel pecahkan 0 = tanggal
         // variabel pecahkan 1 = bulan
         // variabel pecahkan 2 = tahun
-     
-        return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+
+        return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+    }
+    function bln_indo($tanggal)
+    {
+        $bulan = array(
+            1 =>   'Januari',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember'
+        );
+        $pecahkan = explode('-', $tanggal);
+
+        // variabel pecahkan 0 = tanggal
+        // variabel pecahkan 1 = bulan
+        // variabel pecahkan 2 = tahun
+
+        return $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
     }
     function create_nilai($data)
     {
@@ -2083,13 +2111,17 @@ class Crud_model extends CI_Model
         $lk = $this->db->where($where)->get('keagamaan')->num_rows();
         if ($build) {
             $this->db->where($where)->update('build', $data_lpa);
+            return TRUE;
         } else {
             $this->db->insert('build', $data_lpa);
+            return TRUE;
         }
         if ($lk) {
             $this->db->where($where)->update('keagamaan', $data_lk);
+            return TRUE;
         } else {
             $this->db->insert('keagamaan', $data_lk);
+            return TRUE;
         }
     }
     function create_nilai2($data)
@@ -2139,13 +2171,17 @@ class Crud_model extends CI_Model
         $lk = $this->db->where($where)->get('keagamaan2')->num_rows();
         if ($build) {
             $this->db->where($where)->update('build2', $data_lpa);
+            return TRUE;
         } else {
             $this->db->insert('build2', $data_lpa);
+            return TRUE;
         }
         if ($lk) {
             $this->db->where($where)->update('keagamaan2', $data_lk);
+            return TRUE;
         } else {
             $this->db->insert('keagamaan2', $data_lk);
+            return TRUE;
         }
     }
 }

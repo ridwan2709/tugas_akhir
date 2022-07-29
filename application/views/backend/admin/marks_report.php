@@ -141,38 +141,21 @@ $running_year = $this->db->get_where('settings', array('type' => 'running_year')
                                     <thead>
                                         <tr>
                                             <th class="text-center">Bulan</th>
-                                            <th class="text-center">LPA</th>
-                                            <th class="text-center">Rata-Rata LPA</th>
-                                            <th class="text-center"><?php echo get_phrase('grade'); ?></th>
+                                            <th class="text-center">Jumlah LPA</th>
+                                            <th class="text-center">Jumlah LK</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
-                                        foreach ($data_report as $key => $data) {
-                                            $data_perbulan = $this->db->get_where('build', array('student_id' => $student_id, 'section_id' => $section_id, 'class_id' => $class_id, 'date' => $data['date']))->result_array();
-                                            foreach ($data_perbulan as $key => $perbulan) {
-                                                $jumlah_nilai = 0 ;
-                                                foreach ($perbulan as $key => $item) {
-                                                        if (strpos($key, 'adb_') === 0) {
-                                                            $jumlah_nilai += $item;
-                                                        }
-                                                        $jumlah_nilai++;
-                                                    }
-                                                    
-                                                    // echo '<pre>';
-                                                    // var_dump($perbulan['date']);
-                                                    // var_dump($jumlah_nilai);
-                                                    // echo '</pre>';
-                                                    echo "<tr>
-                                                    <td>".$this->crud_model->tgl_indo($perbulan['date'])."</td>
-                                                    <td>".$jumlah_nilai."</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>";
-                                            }
-                                
-                                        }
-                                        ?>
+                                        <?php 
+                                        $jumlah_lpa = 0;
+                                        foreach($data_report as $data){ ?>
+                                        <tr>
+                                            <td><?= $this->crud_model->bln_indo($data['DATE']) ?></td>
+                                            <td><?= $data['jumlah_lpa'] ?></td>
+                                            <td><?= $data['jumlah_lk'] ?></td>
+
+                                        </tr>
+                                        <?php } ?>
                                     </tbody>
                                 </table>
                             </div>
