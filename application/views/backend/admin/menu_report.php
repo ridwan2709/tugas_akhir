@@ -3,9 +3,6 @@
             <div class="os-tabs-controls">
                 <ul class="navs navs-tabs">
                     <li class="navs-item">
-                        <a class="navs-links <?= $this->uri->segment(2) == 'students_report'? 'active' : '' ?>" href="<?php echo base_url(); ?>admin/students_report/"><i class="picons-thin-icon-thin-0729_student_degree_science_university_school_graduate"></i> <span><?php echo get_phrase('students'); ?></span></a>
-                    </li>
-                    <li class="navs-item">
                         <a class="navs-links <?php if ($page_name == 'marks_report') echo "active"; ?>" href="<?php echo base_url(); ?>admin/marks_report/"><i class="picons-thin-icon-thin-0100_to_do_list_reminder_done"></i> <span><?php echo get_phrase('final_marks'); ?></span></a>
                     </li>
                     <li class="navs-item">

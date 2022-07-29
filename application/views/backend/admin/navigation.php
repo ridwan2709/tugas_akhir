@@ -78,8 +78,8 @@ $admin_type = $this->db->get_where('admin', array('admin_id' => $this->session->
 
         <!-- System Reports Access -->
         <?php if ($this->db->get_where('account_role', array('type' => 'system_reports'))->row()->permissions == 1 || $admin_type == 1) : ?>
-          <li <?php if ($page_name == 'students_report' || $page_name == 'attendance_report' || $page_name == 'accounting_report' || $page_name == 'tabulation_report' || $page_name == 'marks_report' || $page_name == 'testimonials' || $page_name == 'management') : ?>class="currentItem" <?php endif; ?>>
-            <a href="<?php echo base_url(); ?>admin/students_report/" data-toggle="tooltip" data-placement="right" data-original-title="<?php echo get_phrase('system_reports'); ?>">
+          <li <?php if ($page_name == 'attendance_report' || $page_name == 'accounting_report' || $page_name == 'tabulation_report' || $page_name == 'marks_report' || $page_name == 'testimonials' || $page_name == 'management') : ?>class="currentItem" <?php endif; ?>>
+            <a href="<?php echo base_url(); ?>admin/marks_report/" data-toggle="tooltip" data-placement="right" data-original-title="<?php echo get_phrase('system_reports'); ?>">
               <div class="left-menu-icon">
                 <i class="picons-thin-icon-thin-0378_analytics_presentation_statistics_graph"></i>
               </div>
@@ -200,7 +200,7 @@ $admin_type = $this->db->get_where('admin', array('admin_id' => $this->session->
         <!-- System Reports Access -->
         <?php if ($this->db->get_where('account_role', array('type' => 'system_reports'))->row()->permissions == 1 || $admin_type == 1) : ?>
           <li <?php if ($page_name == 'students_report' || $page_name == 'attendance_report' || $page_name == 'accounting_report' || $page_name == 'tabulation_report' || $page_name == 'marks_report' || $page_name == 'testimonials' || $page_name == 'management') : ?>class="currentItem" <?php endif; ?>>
-            <a href="<?php echo base_url(); ?>admin/students_report/">
+            <a href="<?php echo base_url(); ?>admin/marks_report/">
               <div class="left-menu-icon">
                 <i class="picons-thin-icon-thin-0378_analytics_presentation_statistics_graph"></i>
               </div>
@@ -331,7 +331,7 @@ $admin_type = $this->db->get_where('admin', array('admin_id' => $this->session->
         <!-- System Reports Access -->
         <?php if ($this->db->get_where('account_role', array('type' => 'system_reports'))->row()->permissions == 1 || $admin_type == 1) : ?>
           <li <?php if ($page_name == 'students_report' || $page_name == 'attendance_report' || $page_name == 'accounting_report' || $page_name == 'tabulation_report' || $page_name == 'marks_report' || $page_name == 'testimonials' || $page_name == 'management') : ?>class="currentItem" <?php endif; ?>>
-            <a href="<?php echo base_url(); ?>admin/students_reports/">
+            <a href="<?php echo base_url(); ?>admin/marks_report/">
               <div class="left-menu-icon">
                 <i class="picons-thin-icon-thin-0378_analytics_presentation_statistics_graph"></i>
               </div>

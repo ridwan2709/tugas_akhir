@@ -1,5 +1,7 @@
 <?php
 $running_year = $this->db->get_where('settings', array('type' => 'running_year'))->row()->description;
+$tglAwal = substr($tgl_awal,0,7);
+$tglAkhir = substr($tgl_akhir,0,7);
 ?>
 <div class="content-w">
     <?php include 'fancy.php'; ?>
@@ -92,13 +94,13 @@ $running_year = $this->db->get_where('settings', array('type' => 'running_year')
                             </div>
                         </div>
                     </div>
-                    <div class="form-group label-floating">
+                    <div class="form-group label-floating mr-3">
                         <label for="" class="control-label">Bulan Awal</label>
-                        <input type="month" name="tgl_awal" id="" class="form-group">
+                        <input type="month" name="tgl_awal" id="" class="form-group" value="<?= @$tglAwal ?>">
                     </div>
                     <div class="form-group label-floating">
                         <label for="" class="control-label">Bulan Akhir</label>
-                        <input type="month" name="tgl_akhir" id="" class="form-group">
+                        <input type="month" name="tgl_akhir" id="" class="form-group" value="<?= @$tglAkhir ?>">
                     </div>
                     <div class="col-sm-1">
                         <div class="form-group">
@@ -120,8 +122,7 @@ $running_year = $this->db->get_where('settings', array('type' => 'running_year')
                                         <img alt="" src="<?php echo base_url(); ?>uploads/<?php echo $this->db->get_where('settings', array('type' => 'logo'))->row()->description; ?>">
                                     </div>
                                     <div class="company-name"><?php echo $system_name; ?></div>
-                                    <div class="company-address"><?php echo get_phrase('marks'); ?> Karakter Siswa</div>
-                                    <div class="company-address">Tahun Ajaran <?php echo $running_year; ?></div>
+                                    <div class="company-address">Hasil Nilai Karakter Siswa</div>
                                 </div>
                                 <div class="info-2">
                                     <div class="rcard-profile">
@@ -129,7 +130,7 @@ $running_year = $this->db->get_where('settings', array('type' => 'running_year')
                                     </div>
                                     <div class="company-name"><?php echo $this->crud_model->get_name('student', $student_id); ?></div>
                                     <div class="company-address">
-                                        <?php echo get_phrase('roll'); ?> : <?php echo $this->db->get_where('enroll', array('student_id' => $student_id))->row()->roll; ?><br />Kelas : <?php echo $this->db->get_where('class', array('class_id' => $class_id))->row()->name; ?><br />Kelompok : <?php echo $this->db->get_where('section', array('section_id' => $section_id))->row()->name; ?>
+                                        <?php echo get_phrase('roll'); ?> : <?php echo $this->db->get_where('enroll', array('student_id' => $student_id))->row()->roll; ?><br />Kelas : <?php echo $this->db->get_where('class', array('class_id' => $class_id))->row()->name; ?><br />Kelompok : <?php echo $this->db->get_where('section', array('section_id' => $section_id))->row()->name; ?> <br> Dari : <?= $this->crud_model->bln_indo($tgl_awal) ?> <br> Sampai : <?= $this->crud_model->bln_indo($tgl_akhir) ?>
                                     </div>
                                 </div>
                             </div>
@@ -147,13 +148,11 @@ $running_year = $this->db->get_where('settings', array('type' => 'running_year')
                                     </thead>
                                     <tbody>
                                         <?php 
-                                        $jumlah_lpa = 0;
                                         foreach($data_report as $data){ ?>
                                         <tr>
                                             <td><?= $this->crud_model->bln_indo($data['DATE']) ?></td>
                                             <td><?= $data['jumlah_lpa'] ?></td>
                                             <td><?= $data['jumlah_lk'] ?></td>
-
                                         </tr>
                                         <?php } ?>
                                     </tbody>
@@ -164,9 +163,8 @@ $running_year = $this->db->get_where('settings', array('type' => 'running_year')
                                     <img alt="" src="<?php echo base_url(); ?>uploads/<?php echo $this->db->get_where('settings', array('type' => 'logo'))->row()->description; ?>"><span><?php echo $system_name; ?></span>
                                 </div>
                                 <div class="rcard-info">
-                                    <span><?php echo $system_email; ?></span><span><?php echo $phone; ?></span>
                                 </div>
-                                <a target="_blank" href="<?php echo base_url(); ?>admin/marks_report_print_view/<?php echo base64_encode($student_id . '.' . $exam_id . '.' . $class_id . '.' . $section_id . '.' . $tahun_ajaran); ?>/"><button class="btn btn-rounded btn-success" type="submit"><i class="picons-thin-icon-thin-0333_printer"></i> <?php echo get_phrase('print'); ?></button></a>
+                                <a target="_blank" href="<?php echo base_url(); ?>admin/marks_report_print_view/<?php echo base64_encode($student_id . '.' . $exam_id . '.' . $class_id . '.' . $section_id . '.' . $tgl_awal . '.' . $tgl_akhir); ?>/"><button class="btn btn-rounded btn-success" type="submit"><i class="picons-thin-icon-thin-0333_printer"></i> <?php echo get_phrase('print'); ?></button></a>
                             </div>
                         </div>
                     </div>
