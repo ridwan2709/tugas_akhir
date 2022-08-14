@@ -1074,6 +1074,7 @@ class Teacher extends CI_Controller
             $this->session->set_userdata('last_page', current_url());
             redirect(base_url(), 'refresh');
         }
+      
         include_once 'src/Google_Client.php';
         include_once 'src/contrib/Google_Oauth2Service.php';
         $clientId = $this->db->get_where('settings', array('type' => 'google_sync'))->row()->description; //Google client ID
@@ -1935,6 +1936,7 @@ class Teacher extends CI_Controller
             if ($data['section_id'] == 1 or $data['section_id'] == 2 or $data['section_id'] == 3) { 
                 //level 1
                 $this->crud_model->create_nilai($data);
+
             } else { 
                 // level2
                 $this->crud_model->create_nilai2($data);

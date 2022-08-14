@@ -170,7 +170,7 @@ list($start_date, $end_date) = x_week_range($date);
                     //level 1
                     foreach ($result as $row) {
                       $param_for_edit = base64_encode($row['class_id'].'-'.$row['section_id'].'-'.$row['student_id']);
-                      $cek_data = $this->db->get_where('build', array('user_id' => 'teacher-'.$this->session->userdata('login_user_id'), 'date' => $date))->row();
+                      $cek_data = $this->db->get_where('build', array('user_id' => 'teacher-'.$this->session->userdata('login_user_id'), 'date' => $date, 'student_id' => $row['student_id']))->row();
                     ?>
                       <tr>
                         <td><span><?php echo $this->db->get_where('enroll', array('student_id' => $row['student_id']))->row()->roll; ?></span></td>

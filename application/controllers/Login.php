@@ -9,7 +9,7 @@ class Login extends CI_Controller
         $this->load->model('crud_model');
         $this->load->model('mail_model');
         $this->load->database();
-        $this->load->library('session');
+        $this->load->library('session', 'unit_test');
         $this->output->set_header('Last-Modified: ' . gmdate("D, d M Y H:i:s") . ' GMT');
         $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         $this->output->set_header('Pragma: no-cache');
@@ -48,8 +48,8 @@ class Login extends CI_Controller
     {
       $username = $this->input->post('username');
       $password = $this->input->post('password');
-      $credential = array('username' => $username, 'password' => sha1($password));
 
+      $credential = array('username' => $username, 'password' => sha1($password));
       $query = $this->db->get_where('admin', $credential);
       if ($query->num_rows() > 0) 
       {

@@ -3271,11 +3271,13 @@ class Admin extends CI_Controller
         $page_data['tgl_awal']   = $this->input->post('tgl_awal').'-1';
         $page_data['tgl_akhir']   = $this->input->post('tgl_akhir').'-1';
         $page_data['data_report'] = $this->Crud_model->get_report($page_data['class_id'], $page_data['section_id'], $page_data['student_id'], $page_data['tgl_awal'], $page_data['tgl_akhir']);
-        // var_dump($page_data['student_id']);die;
+    
         $page_data['page_name']   = 'marks_report';
         $page_data['page_title']  = get_phrase('marks_report');
         $this->load->view('backend/index', $page_data);
     }
+
+    
 
     function academic_settings($param1 = '', $param2 = '', $param3 = '')
     {
@@ -3321,18 +3323,19 @@ class Admin extends CI_Controller
         $exam_id = $ex[1];
         $class_id = $ex[2];
         $section_id = $ex[3];
-        $tahun_ajaran = $ex[4];
+        $tgl_awal = $ex[4];
+        $tgl_akhir = $ex[5];
 
-
-        $class_id     = $this->db->get_where('enroll', array('student_id' => $student_id, 'year' => $tahun_ajaran))->row()->class_id;
-        $class_name   = $this->db->get_where('class', array('class_id' => $class_id))->row()->name;
-
-
+        $page_data['tgl_awal']   = $this->input->post('tgl_awal').'-1';
+        $page_data['tgl_akhir']   = $this->input->post('tgl_akhir').'-1';
         $page_data['student_id'] =   $student_id;
-        $page_data['tahun_ajaran'] =   $tahun_ajaran;
+        $page_data['tgl_awal'] =   $tgl_awal;
+        $page_data['tgl_akhir'] =   $tgl_akhir;
         $page_data['exam_id']    =   $exam_id;
         $page_data['class_id']   =   $class_id;
         $page_data['section_id']   =   $section_id;
+        $page_data['data_report'] = $this->Crud_model->get_report($class_id, $section_id, $student_id, $tgl_awal, $tgl_akhir);
+        $page_data['page_title']  = get_phrase('marks_report');
         $this->load->view('backend/admin/marks_report_print_view', $page_data);
     }
 

@@ -268,7 +268,7 @@
                     </div>
                     <div class="content">
                       <h3 class="title"><?php echo get_phrase('welcome_teacher_dashboard'); ?></h3>
-                      <a href="<?php echo base_url(); ?>teacher/grados/" class="btn btn-warning btn-sm"><?php echo get_phrase('go_to_my_classes'); ?></a>
+                      
                     </div>
                   </div>
                 </div>

@@ -974,6 +974,7 @@ class Parents extends CI_Controller
 
     function get_class_stundets($section_id = '')
     {
+        $this->db->group_by('student_id');
         $students = $this->db->get_where('enroll', array('section_id' => $section_id))->result_array();
         echo '<option value="">' . get_phrase('select') . '</option>';
         foreach ($students as $row) {
